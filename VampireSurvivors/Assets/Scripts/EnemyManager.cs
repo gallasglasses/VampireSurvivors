@@ -64,7 +64,7 @@ public class EnemyManager : MonoBehaviour
 
         if (healthComponent != null)
         {
-            Debug.Log("healthComponent ");
+            //Debug.Log("healthComponent ");
             healthComponent.OnDeath -= HandleEnemyDeath;
             healthComponent.OnDeath += HandleEnemyDeath;
         }
@@ -87,9 +87,25 @@ public class EnemyManager : MonoBehaviour
 
     public Vector2 GetRandomSpawnPosition()
     {
+        //Vector3 center = transform.position;
+        //float radius = 10f;
+        //Vector2 randomCircle = Random.insideUnitCircle * radius;
+        //return new Vector2(center.x + randomCircle.x, center.y + randomCircle.y);
+
         Vector3 center = transform.position;
-        float radius = 10f;
-        Vector2 randomCircle = Random.insideUnitCircle * radius;
-        return new Vector2(center.x + randomCircle.x, center.y + randomCircle.y);
+        float minRadius = 3f;
+        float maxRadius = 5f;
+
+        float radiusX = Random.Range(minRadius, maxRadius);
+        float radiusY = Random.Range(minRadius, maxRadius);
+
+        float angle = Random.Range(0f, Mathf.PI * 2);
+
+        float x = Mathf.Cos(angle) * radiusX;
+        float y = Mathf.Sin(angle) * radiusY;
+        x += Random.Range(-1f, 1f);
+        y += Random.Range(-1f, 1f);
+
+        return new Vector2(center.x + x, center.y + y);
     }
 }

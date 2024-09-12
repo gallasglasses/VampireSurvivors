@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿//using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
@@ -9,25 +10,35 @@ public class EnemyMovement : MonoBehaviour
     private Transform playerTransform;
     private Movement playerMovement;
 
-    [SerializeField] public float moveSpeed = 0.3f;
-    [SerializeField] public float speedMultiplier = 1.5f;
-    [SerializeField] public float range = 2f;
-    [SerializeField] public float circleSpeed = 1f;
-    [SerializeField] public float circleRadius = 2f;
-    [SerializeField] public float minDistance = 0.1f;
-    [SerializeField] public Vector2 spiralTightnessRange = new Vector2(0.5f, 1f);
-    [SerializeField] public float accelerationTime = 2.5f;
-    [SerializeField] public float radiusIncreaseTime = 2.5f;
+    public float moveSpeed = 0.3f;
+    public float speedMultiplier = 1.5f;
+    public float range = 2f;
+    public float circleSpeed = 1f;
+    public float circleRadius = 2f;
+    public float minDistance = 0.1f;
+    public Vector2 spiralTightnessRange = new Vector2(0.5f, 1f);
+    public float accelerationTime = 2.5f;
+    public float radiusIncreaseTime = 2.5f;
+    public float waveFrequency = 1f;
+    public float waveAmplitude = 1f;
+    public float waveDistance = 2f;
+    private bool movingForward = true;
+    private float movedWaveDistance = 0f;
 
     private float angle = 0f;
     private bool isInSpiralMode = true;
+    private bool isDodging = false;
     private Vector2 playerMovementVector;
     private float currentDirection;
     private float currentSpeed;
+    private Vector3 startPosition;
 
     private void Awake()
     {
         playerTransform = GameManager.Instance.playerTransform;
+        isDodging = false;
+        isInSpiralMode = true;
+        startPosition = transform.position;
     }
 
     void Start()
@@ -43,9 +54,9 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector2.Distance((Vector2)transform.position, (Vector2)playerTransform.position);
-        //Debug.Log("distanceToPlayer: " + distanceToPlayer);
+        bool isEnemyClose = distanceToPlayer < range;
 
-        if (distanceToPlayer < range)
+        if (isEnemyClose && !isDodging)
         {
             isInSpiralMode = distanceToPlayer > minDistance;
             if (isInSpiralMode)
@@ -57,6 +68,34 @@ public class EnemyMovement : MonoBehaviour
             {
                 MoveInCircleAroundPlayer();
             }
+        }
+        if(!isEnemyClose && !isDodging)
+        {
+            float step = moveSpeed * Time.deltaTime;
+
+            if (movingForward)
+            {
+                transform.position += Vector3.right * step;
+                movedWaveDistance += step;
+
+                if (movedWaveDistance >= waveDistance)
+                {
+                    movingForward = false;
+                }
+            }
+            else
+            {
+                transform.position -= Vector3.right * step;
+                movedWaveDistance -= step;
+
+                if (movedWaveDistance <= 0)
+                {
+                    movingForward = true;
+                }
+            }
+
+            float waveOffset = Mathf.Sin(Time.time * waveFrequency) * waveAmplitude;
+            transform.position = new Vector3(transform.position.x, startPosition.y + waveOffset, transform.position.z);
         }
     }
 
@@ -130,6 +169,11 @@ public class EnemyMovement : MonoBehaviour
 
         Vector3 direction = (circularPosition - transform.position).normalized;
         transform.position += direction * moveSpeed * Time.deltaTime;
+    }
+
+    public void Dodge(bool canDodge)
+    {
+        isDodging = canDodge;
     }
 
     private void OnDestroy()

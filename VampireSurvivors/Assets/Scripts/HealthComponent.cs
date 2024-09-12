@@ -40,7 +40,7 @@ public class HealthComponent : MonoBehaviour
         var healthDelta = nextHealth - health;
         health = nextHealth;
 
-        Debug.Log("SetHealth " + health);
+        //Debug.Log("SetHealth " + health);
         //broadcast event OnHealthChanged
     }
 
@@ -51,7 +51,7 @@ public class HealthComponent : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        Debug.Log("damage " + damage + " Health " + health);
+        //Debug.Log("damage " + damage + " Health " + health);
         if (damage <= 0.0f || IsDead()) return;
         SetHealth(health - damage);
 

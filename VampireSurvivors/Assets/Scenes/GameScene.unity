@@ -523,7 +523,7 @@ MonoBehaviour:
   enemy: {fileID: 8195111739939773672, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
   enemyTransform: {fileID: 1574623859278580689, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
   enemiesPerWave: 5
-  waveInterval: 10
+  waveInterval: 3
 --- !u!4 &1428274808
 Transform:
   m_ObjectHideFlags: 0

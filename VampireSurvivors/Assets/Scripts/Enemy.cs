@@ -19,13 +19,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -47,9 +45,10 @@ public class Enemy : MonoBehaviour
             }
         }
     }
+
     private void HandleDeath()
     {
-        Debug.Log("Destroy ");
+        //Debug.Log("Destroy ");
         _pool.Release(this);
     }
 

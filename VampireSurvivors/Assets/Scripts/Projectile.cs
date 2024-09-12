@@ -54,7 +54,7 @@ public class Projectile : MonoBehaviour
 
         if (healthComponent != null)
         {
-            Debug.Log("TakeDamage");
+            //Debug.Log("TakeDamage");
             healthComponent.TakeDamage(damage);
         }
         _hasBeenReleased = true;

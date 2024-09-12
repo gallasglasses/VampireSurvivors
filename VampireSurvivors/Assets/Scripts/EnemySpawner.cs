@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Enemy CreateEnemy()
     {
-        var enemy = Instantiate(enemyManager.enemy, enemyManager.enemyTransform.position, Quaternion.identity);
+        var enemy = Instantiate(enemyManager.enemy, enemyManager.GetRandomSpawnPosition(), Quaternion.identity);
         if (enemy != null)
         {
             enemy.SetPool(_pool);
