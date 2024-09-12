@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,17 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField] public float speed;
+    private float originalSpeed;
     private SpriteRenderer spriteRenderer;
-    private Vector3 direction;
+    private Vector2 direction;
     public Animator animator;
+
+    public event Action<Vector2> OnMovementChanged;
 
     void Start()
     {
         spriteRenderer = animator.GetComponent<SpriteRenderer>();
+        originalSpeed = speed;
     }
 
     // Update is called once per frame
@@ -20,14 +25,20 @@ public class Movement : MonoBehaviour
         float xValue = Input.GetAxisRaw("Horizontal");
         float yValue = Input.GetAxisRaw("Vertical");
 
-        direction = new Vector3(xValue, yValue).normalized;
+        Vector2 newDirection = new Vector2(xValue, yValue).normalized;
+
+        if (newDirection != direction)
+        {
+            direction = newDirection;
+            OnMovementChanged?.Invoke(direction);
+        }
 
         AnimateMovement();
     }
 
     private void FixedUpdate()
     {
-        this.transform.position += direction * speed * Time.deltaTime; 
+        this.transform.position += new Vector3(direction.x * originalSpeed * Time.deltaTime, direction.y * originalSpeed * Time.deltaTime, this.transform.position.z); 
     }
 
     private void AnimateMovement()
@@ -45,5 +56,23 @@ public class Movement : MonoBehaviour
                 //Debug.Log("direction.x : " + direction.x);
             }
         }
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            RestoreSpeed();
+        }
+    }
+
+    public void SlowDown()
+    {
+        originalSpeed = speed / 2;
+        //Debug.Log("Player slowed down " + speed);
+    }
+
+    public void RestoreSpeed()
+    {
+        originalSpeed = speed;
     }
 }
