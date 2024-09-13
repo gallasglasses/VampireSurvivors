@@ -53,7 +53,6 @@ public class Movement : MonoBehaviour
                 {
                     spriteRenderer.flipX = direction.x < 0f;
                 }
-                //Debug.Log("direction.x : " + direction.x);
             }
         }
     }
@@ -68,7 +67,6 @@ public class Movement : MonoBehaviour
     public void SlowDown()
     {
         originalSpeed = speed / 2;
-        //Debug.Log("Player slowed down " + speed);
     }
 
     public void RestoreSpeed()

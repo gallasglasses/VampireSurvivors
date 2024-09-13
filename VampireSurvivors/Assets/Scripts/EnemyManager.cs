@@ -4,35 +4,47 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public Enemy enemy;
-    public Transform enemyTransform;
-
-    private EnemySpawner enemySpawner;
-
-    public int enemiesPerWave = 10;
-    public float waveInterval = 5f;
-    private float waveTimer;
-    private int enemiesSpawnedInCurrentWave;
-    private int currentEnemyCount;
+    [Header("Wave Settings")]
+    [SerializeField] private int enemiesPerWave = 10;
+    [SerializeField] private float waveInterval = 5f;
+    private float currentWaveTime;
     private int spawnedWaves;
 
-    // Start is called before the first frame update
+    [Header("Spawn Settings")]
+    public Enemy enemy;
+    public Transform enemyTransform;
+    [SerializeField] private Vector2 spawnArea;
+
+    private EnemySpawner enemySpawner;
+    private Transform playerTransform;
+    private Movement playerMovement;
+    private Vector2 playerMovementVector;
+    private int spawnedEnemiesInCurrentWave;
+    private int currentEnemyCount;
+
     void Start()
     {
         enemySpawner = GetComponent<EnemySpawner>();
+        playerTransform = GameManager.Instance.playerTransform;
+
+        playerMovement = playerTransform.GetComponent<Movement>();
+        if (playerMovement != null)
+        {
+            playerMovement.OnMovementChanged -= HandlePlayerMovementChanged;
+            playerMovement.OnMovementChanged += HandlePlayerMovementChanged;
+        }
 
         currentEnemyCount = 0;
         spawnedWaves = 0;
     }
 
-    // Update is called once per frame 
     void Update()
     {
-        waveTimer += Time.deltaTime;
+        currentWaveTime += Time.deltaTime;
 
-        if (waveTimer >= waveInterval)
+        if (currentWaveTime >= waveInterval)
         {
-            waveTimer = 0f;
+            currentWaveTime = 0f;
             StartNewWave();
         }
 
@@ -40,10 +52,10 @@ public class EnemyManager : MonoBehaviour
 
     void StartNewWave()
     {
-        enemiesSpawnedInCurrentWave = 0;
+        spawnedEnemiesInCurrentWave = 0;
         spawnedWaves++;
 
-        while (enemiesSpawnedInCurrentWave < enemiesPerWave)
+        while (spawnedEnemiesInCurrentWave < enemiesPerWave)
         {
             SpawnEnemy();
         }
@@ -69,16 +81,14 @@ public class EnemyManager : MonoBehaviour
             healthComponent.OnDeath += HandleEnemyDeath;
         }
 
-        enemiesSpawnedInCurrentWave++;
+        spawnedEnemiesInCurrentWave++;
         currentEnemyCount++;
     }
 
     private void HandleEnemyDeath()
     {
-        // Decrement the current enemy count
         currentEnemyCount--;
 
-        // Ensure that if the wave is complete and there are dead enemies, they are replaced
         if (currentEnemyCount < enemiesPerWave * spawnedWaves)
         {
             SpawnEnemy();
@@ -87,25 +97,60 @@ public class EnemyManager : MonoBehaviour
 
     public Vector2 GetRandomSpawnPosition()
     {
-        //Vector3 center = transform.position;
-        //float radius = 10f;
-        //Vector2 randomCircle = Random.insideUnitCircle * radius;
-        //return new Vector2(center.x + randomCircle.x, center.y + randomCircle.y);
+        Vector3 position = new Vector3();
+        Vector2 movementDirection = playerMovementVector.normalized;
+        if (movementDirection != Vector2.zero)
+        {
+            if (Mathf.Abs(movementDirection.x) > Mathf.Abs(movementDirection.y))
+            {
+                if (movementDirection.x > 0)
+                {
+                    position.x = spawnArea.x;  // spawn right
+                    position.y = Random.Range(-spawnArea.y, spawnArea.y);
+                }
+                else
+                {
+                    position.x = -spawnArea.x; // spawn left
+                    position.y = Random.Range(-spawnArea.y, spawnArea.y);
+                }
+            }
+            else
+            {
+                if (movementDirection.y > 0)
+                {
+                    position.y = spawnArea.y;  // spawn up
+                    position.x = Random.Range(-spawnArea.x, spawnArea.x);
+                }
+                else
+                {
+                    position.y = -spawnArea.y; // spawn down
+                    position.x = Random.Range(-spawnArea.x, spawnArea.x);
+                }
+            }
+        }
+        else
+        {
+            float k = Random.value > 0.5f ? -1f : 1f;
+            if (Random.value > 0.5f)
+            {
+                position.x = Random.Range(-spawnArea.x, spawnArea.x);
+                position.y = spawnArea.y * k;
+            }
+            else
+            {
+                position.y = Random.Range(-spawnArea.y, spawnArea.y);
+                position.x = spawnArea.x * k;
+            }
+        }
 
-        Vector3 center = transform.position;
-        float minRadius = 3f;
-        float maxRadius = 5f;
+        position.z = 0f;
 
-        float radiusX = Random.Range(minRadius, maxRadius);
-        float radiusY = Random.Range(minRadius, maxRadius);
+        position += playerTransform.position;
 
-        float angle = Random.Range(0f, Mathf.PI * 2);
-
-        float x = Mathf.Cos(angle) * radiusX;
-        float y = Mathf.Sin(angle) * radiusY;
-        x += Random.Range(-1f, 1f);
-        y += Random.Range(-1f, 1f);
-
-        return new Vector2(center.x + x, center.y + y);
+        return position;
+    }
+    void HandlePlayerMovementChanged(Vector2 movementVector)
+    {
+        playerMovementVector = movementVector;
     }
 }

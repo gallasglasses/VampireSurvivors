@@ -5,9 +5,10 @@ using UnityEngine.Pool;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] public float force = 2.5f;
-    [SerializeField] public float deactivateTime = 15f;
-    [SerializeField] public float damage = 1f;
+    public float force = 2.5f;
+    public float damage = 1f;
+    public float deactivateTime = 15f;
+
     private Vector3 mousePosition;
     private Camera mainCamera;
     private Rigidbody2D body;
@@ -24,21 +25,12 @@ public class Projectile : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
-    {
-        //SetVelocity();
-    }
-
     private void OnEnable()
     {
         deactivateProjectileAfterTimeCoroutine = StartCoroutine(DeactivateProjectileAfterTime());
 
         SetVelocity();
         _hasBeenReleased = false;
-    }
-
-    void Update()
-    {
     }
 
     public void SetDirection(Vector3 dir)
@@ -50,13 +42,11 @@ public class Projectile : MonoBehaviour
     {
         if (_hasBeenReleased) return;
 
-        HealthComponent healthComponent = collision.gameObject.GetComponent<HealthComponent>();
-
-        if (healthComponent != null)
+        if (collision.gameObject.TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
         {
-            //Debug.Log("TakeDamage");
             healthComponent.TakeDamage(damage);
         }
+
         _hasBeenReleased = true;
         _pool.Release(this);
     }

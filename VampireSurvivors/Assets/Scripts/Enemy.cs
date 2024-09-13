@@ -6,27 +6,21 @@ using UnityEngine.Pool;
 public class Enemy : MonoBehaviour
 {
     private HealthComponent healthComponent;
+    private EnemyMovement enemyMovement;
+
     private ObjectPool<Enemy> _pool;
 
     private void Awake()
     {
-        healthComponent = GetComponent<HealthComponent>();
-
-        if (healthComponent != null)
+        if (TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
         {
-            healthComponent.OnDeath -= HandleDeath;
             healthComponent.OnDeath += HandleDeath;
         }
-    }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-
+        if (TryGetComponent<EnemyMovement>(out EnemyMovement enemyMovement))
+        {
+            enemyMovement.OnExclusion += HandleDeath;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -48,7 +42,16 @@ public class Enemy : MonoBehaviour
 
     private void HandleDeath()
     {
-        //Debug.Log("Destroy ");
+        if (healthComponent != null)
+        {
+            healthComponent.OnDeath -= HandleDeath;
+        }
+
+        if (enemyMovement != null)
+        {
+            enemyMovement.OnExclusion -= HandleDeath;
+        }
+
         _pool.Release(this);
     }
 
@@ -57,6 +60,11 @@ public class Enemy : MonoBehaviour
         if (healthComponent != null)
         {
             healthComponent.OnDeath -= HandleDeath;
+        }
+
+        if (enemyMovement != null)
+        {
+            enemyMovement.OnExclusion -= HandleDeath;
         }
     }
 

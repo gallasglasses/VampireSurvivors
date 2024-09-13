@@ -62,17 +62,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7247234370762194e976f5030fef140c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
+  moveSpeed: 0.55
   speedMultiplier: 2
-  range: 3
-  circleSpeed: 0.5
-  circleRadius: 2
-  minDistance: 0.1
+  detectionRange: 1
+  exclusionRange: 4
+  minTimeBeforeExclusion: 2
+  circleSpeed: 0.75
+  circleRadius: 0.15
+  minDistance: 0.15
   spiralTightnessRange: {x: 0.1, y: 0.5}
-  accelerationTime: 0.25
+  accelerationTime: 0.5
   radiusIncreaseTime: 0.5
-  waveFrequency: 1
-  waveAmplitude: 1
+  waveFrequency: 5
+  waveAmplitude: 0.5
   waveDistance: 2
 --- !u!61 &5496586452052836413
 BoxCollider2D:
@@ -173,12 +175,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dodgeSpeed: 0.5
   dodgeDistance: 1.5
+  dodgeDuration: 0.2
   detectionRadius: 0.2
+  enemyMovement: {fileID: 9016278546813691111}
   projectileLayer:
     serializedVersion: 2
     m_Bits: 256
-  dodgeDuration: 0.2
-  enemyMovement: {fileID: 9016278546813691111}
 --- !u!1 &8195984694143472219
 GameObject:
   m_ObjectHideFlags: 0

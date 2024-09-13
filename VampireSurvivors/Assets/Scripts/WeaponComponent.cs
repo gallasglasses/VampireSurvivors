@@ -18,15 +18,12 @@ public class WeaponComponent : MonoBehaviour
     private float timer;
     public float timeBetweenFire;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         projectileSpawner = GetComponent<ProjectileSpawner>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.rotation = Quaternion.Euler(0, 0, GetRawRotation());
@@ -45,18 +42,7 @@ public class WeaponComponent : MonoBehaviour
         {
             canFire = false;
             projectileRotation = Quaternion.Euler(0, 0, GetRawRotation() - 90);
-            //var spawnedProjectile = Instantiate(projectile, projectileTransform.position, Quaternion.Euler(0, 0, rotationZ - 90));
             var projectile = projectileSpawner._pool.Get();
-            //projectile.SetDirection(GetDirection());
-
-            //if (spawnedProjectile != null)
-            //{
-            //    Projectile projectileClass = null;
-            //    if (spawnedProjectile.TryGetComponent<Projectile>(out projectileClass))
-            //    {
-            //        projectileClass.SetDirection(direction);
-            //    }
-            //}
         }
     }
 

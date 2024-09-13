@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 1195523972}
   - component: {fileID: 1195523971}
   - component: {fileID: 1195523970}
+  - component: {fileID: 1195523973}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -433,6 +434,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1195523973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1195523969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b4bc784459a09458a073902487eedd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1182317370}
 --- !u!1 &1252893697
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,10 +534,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d585aa2917b4946498c9fc3b05e3e6e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemiesPerWave: 1
+  waveInterval: 5
   enemy: {fileID: 8195111739939773672, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
   enemyTransform: {fileID: 1574623859278580689, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
-  enemiesPerWave: 5
-  waveInterval: 3
+  minSpawnRadius: 3
+  maxSpawnRadius: 10
+  spawnArea: {x: 3, y: 3}
 --- !u!4 &1428274808
 Transform:
   m_ObjectHideFlags: 0

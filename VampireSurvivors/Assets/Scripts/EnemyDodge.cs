@@ -6,10 +6,10 @@ public class EnemyDodge : MonoBehaviour
 {
     public float dodgeSpeed = 2f;
     public float dodgeDistance = 1f;
-    public float detectionRadius = 0.5f;
-    public LayerMask projectileLayer;
     public float dodgeDuration = 0.2f;
+    public float detectionRadius = 0.5f;
     public EnemyMovement enemyMovement;
+    public LayerMask projectileLayer;
 
     private Vector2 dodgeDirection;
     private bool isDodging = false;
