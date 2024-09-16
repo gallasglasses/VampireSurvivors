@@ -14,9 +14,19 @@ public class WeaponComponent : MonoBehaviour
 
     private ProjectileSpawner projectileSpawner;
 
-    public bool canFire;
+    private bool canFire;
+    private bool isReadyAttack;
     private float timer;
-    public float timeBetweenFire;
+    [SerializeField] private float timeBetweenFire; 
+    private PlayerController playerController;
+
+    private void Awake()
+    {
+        if (GameManager.Instance.player.TryGetComponent<PlayerController>(out PlayerController playerController))
+        {
+            playerController.OnAttack += HandleAttack;
+        }
+    }
 
     void Start()
     {
@@ -38,11 +48,9 @@ public class WeaponComponent : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButton(0) && canFire)
+        if(isReadyAttack && canFire)
         {
-            canFire = false;
-            projectileRotation = Quaternion.Euler(0, 0, GetRawRotation() - 90);
-            var projectile = projectileSpawner._pool.Get();
+            Attack();
         }
     }
 
@@ -57,5 +65,25 @@ public class WeaponComponent : MonoBehaviour
     {
         Vector3 direction = GetDirection();
         return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    }
+
+    private void HandleAttack(bool canStart)
+    {
+        Debug.Log("isReadyAttack " + canStart);
+        isReadyAttack = canStart;
+    }
+
+    private void Attack()
+    {
+        canFire = false;
+        projectileRotation = Quaternion.Euler(0, 0, GetRawRotation() - 90);
+        var projectile = projectileSpawner._pool.Get();
+    }
+    private void OnDestroy()
+    {
+        if (playerController != null)
+        {
+            playerController.OnAttack -= HandleAttack;
+        }
     }
 }

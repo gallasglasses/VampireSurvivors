@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; }
+    
     void Update()
     {
         Attack();
@@ -13,7 +15,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Attack");
+            //Debug.Log("Attack");
         }
     }
 }

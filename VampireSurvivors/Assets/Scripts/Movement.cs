@@ -2,38 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
 {
     [SerializeField] public float speed;
     private float originalSpeed;
     private SpriteRenderer spriteRenderer;
-    private Vector2 direction;
+    private Vector2 direction = Vector2.zero;
+
     public Animator animator;
 
     public event Action<Vector2> OnMovementChanged;
-
+    
     void Start()
     {
         spriteRenderer = animator.GetComponent<SpriteRenderer>();
         originalSpeed = speed;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        float xValue = Input.GetAxisRaw("Horizontal");
-        float yValue = Input.GetAxisRaw("Vertical");
-
-        Vector2 newDirection = new Vector2(xValue, yValue).normalized;
-
-        if (newDirection != direction)
-        {
-            direction = newDirection;
-            OnMovementChanged?.Invoke(direction);
-        }
-
-        AnimateMovement();
     }
 
     private void FixedUpdate()
@@ -72,5 +57,16 @@ public class Movement : MonoBehaviour
     public void RestoreSpeed()
     {
         originalSpeed = speed;
+    }
+
+    public void Move(Vector2 newDirection)
+    {
+        if (newDirection != direction)
+        {
+            direction = newDirection;
+            OnMovementChanged?.Invoke(direction);
+        }
+
+        AnimateMovement();
     }
 }
