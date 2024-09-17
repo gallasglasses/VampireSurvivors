@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EnemyDodge : MonoBehaviour
 {
-    public float dodgeSpeed = 2f;
-    public float dodgeDistance = 1f;
-    public float dodgeDuration = 0.2f;
-    public float detectionRadius = 0.5f;
-    public EnemyMovement enemyMovement;
-    public LayerMask projectileLayer;
+    [SerializeField] private float dodgeSpeed = 2f;
+    [SerializeField] private float dodgeDistance = 1f;
+    [SerializeField] private float dodgeDuration = 0.2f;
+    [SerializeField] private float detectionRadius = 0.5f;
+    [SerializeField] private EnemyMovement enemyMovement;
+    [SerializeField] private LayerMask projectileLayer;
 
     private Vector2 dodgeDirection;
     private bool isDodging = false;

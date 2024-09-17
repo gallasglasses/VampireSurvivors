@@ -6,21 +6,21 @@ using UnityEngine.Pool;
 public class Enemy : MonoBehaviour
 {
     private HealthComponent healthComponent;
-    private EnemyMovement enemyMovement;
 
     private ObjectPool<Enemy> _pool;
+    private bool _hasBeenReleased = false;
 
-    private void Awake()
+    public delegate void OnReleaseEvent();
+    public event OnReleaseEvent OnRelease;
+
+    protected virtual void OnEnable()
     {
         if (TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
         {
             healthComponent.OnDeath += HandleDeath;
         }
 
-        if (TryGetComponent<EnemyMovement>(out EnemyMovement enemyMovement))
-        {
-            enemyMovement.OnExclusion += HandleDeath;
-        }
+        _hasBeenReleased = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -40,36 +40,33 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void HandleDeath()
+    protected void HandleDeath()
     {
-        if (healthComponent != null)
-        {
-            healthComponent.OnDeath -= HandleDeath;
-        }
+        Unsubcribe();
 
-        if (enemyMovement != null)
+        if (!_hasBeenReleased)
         {
-            enemyMovement.OnExclusion -= HandleDeath;
+            _hasBeenReleased = true;
+            OnRelease?.Invoke();
+            _pool.Release(this);
         }
-
-        _pool.Release(this);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        if (healthComponent != null)
-        {
-            healthComponent.OnDeath -= HandleDeath;
-        }
-
-        if (enemyMovement != null)
-        {
-            enemyMovement.OnExclusion -= HandleDeath;
-        }
+        Unsubcribe();
     }
 
     public void SetPool(ObjectPool<Enemy> pool)
     {
         _pool = pool;
+    }
+
+    protected virtual void Unsubcribe()
+    {
+        if (healthComponent != null)
+        {
+            healthComponent.OnDeath -= HandleDeath;
+        }
     }
 }

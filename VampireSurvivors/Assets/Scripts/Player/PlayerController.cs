@@ -48,17 +48,17 @@ public class PlayerController : MonoBehaviour
 
     private void Fire(InputAction.CallbackContext callback)
     {
-        Debug.Log("fire");
+        //Debug.Log("fire");
         if (callback.performed)
         {
             isLMBPressed = true;
-            Debug.Log("isLMBPressed true");
+            //Debug.Log("isLMBPressed true");
             OnAttack.Invoke(isLMBPressed);
         }
         else if (callback.canceled)
         {
             isLMBPressed = false;
-            Debug.Log("isLMBPressed false");
+            //Debug.Log("isLMBPressed false");
             OnAttack.Invoke(isLMBPressed);
         }
     }

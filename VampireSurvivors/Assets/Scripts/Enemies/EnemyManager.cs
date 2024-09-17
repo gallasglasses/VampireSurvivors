@@ -7,12 +7,14 @@ public class EnemyManager : MonoBehaviour
     [Header("Wave Settings")]
     [SerializeField] private int enemiesPerWave = 10;
     [SerializeField] private float waveInterval = 5f;
+    //[SerializeField] private float waveAmount = 5f;
+
     private float currentWaveTime;
     private int spawnedWaves;
 
     [Header("Spawn Settings")]
     public Enemy enemy;
-    public Transform enemyTransform;
+    //public Transform enemyTransform;
     [SerializeField] private Vector2 spawnArea;
 
     private EnemySpawner enemySpawner;
@@ -25,9 +27,9 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         enemySpawner = GetComponent<EnemySpawner>();
-        playerTransform = GameManager.Instance.playerTransform;
+        playerTransform = GameManager.Instance.player.GetComponent<Transform>();
 
-        playerMovement = playerTransform.GetComponent<Movement>();
+        playerMovement = GameManager.Instance.player.GetComponent<Movement>();
         if (playerMovement != null)
         {
             playerMovement.OnMovementChanged -= HandlePlayerMovementChanged;
@@ -71,15 +73,8 @@ public class EnemyManager : MonoBehaviour
         var enemy = enemySpawner._pool.Get();
 
         enemy.transform.position = GetRandomSpawnPosition();
-
-        var healthComponent = enemy.GetComponent<HealthComponent>();
-
-        if (healthComponent != null)
-        {
-            //Debug.Log("healthComponent ");
-            healthComponent.OnDeath -= HandleEnemyDeath;
-            healthComponent.OnDeath += HandleEnemyDeath;
-        }
+        enemy.OnRelease -= HandleEnemyDeath;
+        enemy.OnRelease += HandleEnemyDeath;
 
         spawnedEnemiesInCurrentWave++;
         currentEnemyCount++;

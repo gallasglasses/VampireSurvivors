@@ -22,14 +22,14 @@ public class WeaponComponent : MonoBehaviour
 
     private void Awake()
     {
-        if (GameManager.Instance.player.TryGetComponent<PlayerController>(out PlayerController playerController))
-        {
-            playerController.OnAttack += HandleAttack;
-        }
     }
 
     void Start()
     {
+        if (GameManager.Instance.player.TryGetComponent<PlayerController>(out PlayerController playerController))
+        {
+            playerController.OnAttack += HandleAttack;
+        }
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         projectileSpawner = GetComponent<ProjectileSpawner>();
     }
@@ -69,7 +69,7 @@ public class WeaponComponent : MonoBehaviour
 
     private void HandleAttack(bool canStart)
     {
-        Debug.Log("isReadyAttack " + canStart);
+        //Debug.Log("isReadyAttack " + canStart);
         isReadyAttack = canStart;
     }
 

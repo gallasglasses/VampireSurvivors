@@ -43,7 +43,7 @@ public class HealthComponent : MonoBehaviour
 
         if (IsDead() && OnDeath != null)
         {
-            OnDeath.Invoke();
+            OnDeath?.Invoke();
         }
     }
 }

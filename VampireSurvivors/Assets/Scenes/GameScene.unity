@@ -381,8 +381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesPerWave: 1
   waveInterval: 5
-  enemy: {fileID: 8195111739939773672, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
-  enemyTransform: {fileID: 1574623859278580689, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
+  enemy: {fileID: 4934416091218842360, guid: 86f9dac26ad79584290b55e3b6a98501, type: 3}
   spawnArea: {x: 3, y: 3}
 --- !u!4 &1428274808
 Transform:
@@ -407,6 +406,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3158894370770768484, guid: 0e2c73c182812b641be90e6063f42d38, type: 3}
+      propertyPath: speed
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 3158894370770768484, guid: 0e2c73c182812b641be90e6063f42d38, type: 3}
       propertyPath: playerInput.m_Name
       value: Player Input

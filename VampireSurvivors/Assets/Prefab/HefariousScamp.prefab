@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1574623859278580689}
-  - component: {fileID: 8195111739939773672}
-  - component: {fileID: 9016278546813691111}
-  - component: {fileID: 5496586452052836413}
-  - component: {fileID: 8648729461848837988}
+  - component: {fileID: 4016363180581210088}
+  - component: {fileID: 3210155105835625151}
   - component: {fileID: 1270967955867098366}
   - component: {fileID: 2280679583236672187}
+  - component: {fileID: 5496586452052836413}
+  - component: {fileID: 8648729461848837988}
   m_Layer: 7
-  m_Name: Enemy
+  m_Name: HefariousScamp
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,14 +31,14 @@ Transform:
   m_GameObject: {fileID: 709989548929342470}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.523, y: 0.314, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4343978578177649115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8195111739939773672
+--- !u!114 &4016363180581210088
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,10 +47,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 709989548929342470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12640a091adfef54e9553d53d289f134, type: 3}
+  m_Script: {fileID: 11500000, guid: 38252f3e409fc4e468477d416ce68bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9016278546813691111
+--- !u!114 &3210155105835625151
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,23 +59,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 709989548929342470}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7247234370762194e976f5030fef140c, type: 3}
+  m_Script: {fileID: 11500000, guid: f4148a92c17a10b4d870bc529051f795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.55
   speedMultiplier: 2
+  accelerationTime: 0.5
+  minDistance: 0.15
   detectionRange: 1
   exclusionRange: 4
   minTimeBeforeExclusion: 2
-  circleSpeed: 0.75
   circleRadius: 0.15
-  minDistance: 0.15
   spiralTightnessRange: {x: 0.1, y: 0.5}
-  accelerationTime: 0.5
   radiusIncreaseTime: 0.5
   waveFrequency: 5
   waveAmplitude: 0.5
-  waveDistance: 2
+--- !u!114 &1270967955867098366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709989548929342470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55b98b5b3f6ec644b0e4768c9e4ae2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 2
+--- !u!114 &2280679583236672187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709989548929342470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 275d87d8f49450246a02d9c4ec595b8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dodgeSpeed: 0.5
+  dodgeDistance: 1.5
+  dodgeDuration: 0.2
+  detectionRadius: 0.2
+  enemyMovement: {fileID: 3210155105835625151}
+  projectileLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!61 &5496586452052836413
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -148,39 +179,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1270967955867098366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 709989548929342470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f55b98b5b3f6ec644b0e4768c9e4ae2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 2
---- !u!114 &2280679583236672187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 709989548929342470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 275d87d8f49450246a02d9c4ec595b8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dodgeSpeed: 0.5
-  dodgeDistance: 1.5
-  dodgeDuration: 0.2
-  detectionRadius: 0.2
-  enemyMovement: {fileID: 9016278546813691111}
-  projectileLayer:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!1 &8195984694143472219
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,6 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4343978578177649115}
   - component: {fileID: 9145115112365263665}
+  - component: {fileID: 7614092375905936493}
   m_Layer: 7
   m_Name: Visuals
   m_TagString: Untagged
@@ -265,3 +264,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &7614092375905936493
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8195984694143472219}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: -7341034606885793232, guid: 659a51be467b7ae47bc9bd4d9a5ebb73, type: 3}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
