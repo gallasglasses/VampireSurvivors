@@ -175,7 +175,10 @@ MonoBehaviour:
   detectionRange: 1
   exclusionRange: 4
   minTimeBeforeExclusion: 2
-  angleFactorRange: {x: 1.5, y: 4}
+  zigzagFrequency: 1
+  zigzagAmplitude: 1.5
+  zigzagAmpVec: {x: 1.5, y: 10}
+  angleRange: {x: 30, y: 45}
 --- !u!114 &3850590918494927158
 MonoBehaviour:
   m_ObjectHideFlags: 0

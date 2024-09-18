@@ -29,6 +29,7 @@ public class EnemyMovement : MonoBehaviour
     protected Vector2 playerMovementVector;
     protected Vector2 directionToPlayer;
     protected float distanceToPlayer = 0f;
+    protected float initialDistanceToPlayer = 0f;
 
     protected float currentDirection;
     protected float currentSpeed;
@@ -51,6 +52,7 @@ public class EnemyMovement : MonoBehaviour
     void OnEnable()
     {
         Invoke("EnableDistanceCheck", minTimeBeforeExclusion);
+        initialDistanceToPlayer = GetDistanceToPlayer();
     }
 
     void Start()
@@ -120,11 +122,6 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 GetDirectionToPlayer()
     {
         return (playerTransform.position - transform.position).normalized;
-    }
-
-    protected Vector3 GetDirection()
-    {
-        return playerTransform.position - transform.position;
     }
 
     void EnableDistanceCheck()
