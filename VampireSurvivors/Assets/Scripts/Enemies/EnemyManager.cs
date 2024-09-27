@@ -1,34 +1,66 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class EnemyManager : MonoBehaviour
+public enum TypeEnemy
+{
+    HefariousScamp,
+    SkeweringStalker
+}
+
+public class EnemyManager : GameplayMonoBehaviour
 {
     [Header("Wave Settings")]
-    [SerializeField] private int enemiesPerWave = 10;
-    [SerializeField] private float waveInterval = 5f;
-    //[SerializeField] private float waveAmount = 5f;
+    [SerializeField] private float waveDuration = 60f;
+    [SerializeField] private int maxWaves = 10;
+    [SerializeField] private float intervalDuration = 10f;
+    private float nextWaveTime = 0;
+    private float nextIntervalTime = 0;
+    private int spawnedWaves = 0; 
+    private int currentInterval = 0;
+    private bool isSpawningResiduals = false;
 
-    private float currentWaveTime;
-    private int spawnedWaves;
+    [Header("Enemy Spawn Settings")]
 
-    [Header("Spawn Settings")]
-    public Enemy enemy;
-    //public Transform enemyTransform;
-    [SerializeField] private Vector2 spawnArea;
+    [SerializeField] private MyDictionary<TypeEnemy, Enemy> enemies;
+    public Dictionary<TypeEnemy, Enemy> enemiesDict = new Dictionary<TypeEnemy, Enemy>();
 
     private EnemySpawner enemySpawner;
+    [SerializeField] private Vector2 spawnArea;
+    [SerializeField] private int totalEnemiesPerWave = 60;
+    [SerializeField] private int maxEnemiesAlive = 300;
+    [SerializeField] private int startEnemiesAmount = 10;
+    private int enemiesPerInterval;
+    private int enemiesSpawnedThisWave = 0;
+    private int enemiesAlive = 0;
+
+    [Header("Gem Spawn Settings")]
+    public ExperienceGem gem;
+    private GemSpawner gemSpawner;
+    private Sprite[] gemSprites;
+    [SerializeField] private string spriteFolderPath = "ExperienceGemSprites";
+
     private Transform playerTransform;
     private Movement playerMovement;
     private Vector2 playerMovementVector;
-    private int spawnedEnemiesInCurrentWave;
-    private int currentEnemyCount;
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        enemiesDict = enemies.ToDictionary();
+    }
 
     void Start()
     {
         enemySpawner = GetComponent<EnemySpawner>();
-        playerTransform = GameManager.Instance.player.GetComponent<Transform>();
+        gemSpawner = GetComponent<GemSpawner>();
 
+        playerTransform = GameManager.Instance.player.GetComponent<Transform>();
         playerMovement = GameManager.Instance.player.GetComponent<Movement>();
         if (playerMovement != null)
         {
@@ -36,31 +68,72 @@ public class EnemyManager : MonoBehaviour
             playerMovement.OnMovementChanged += HandlePlayerMovementChanged;
         }
 
-        currentEnemyCount = 0;
-        spawnedWaves = 0;
+        gemSprites = Resources.LoadAll<Sprite>(spriteFolderPath);
+
+        nextWaveTime = Time.time;
+        nextIntervalTime = Time.time;
     }
 
-    void Update()
+    protected override void UnPausableUpdate()
     {
-        currentWaveTime += Time.deltaTime;
-
-        if (currentWaveTime >= waveInterval)
+        if(GetPauseDuration() > 0)
         {
-            currentWaveTime = 0f;
-            StartNewWave();
+            nextWaveTime += GetPauseDuration();
+            nextIntervalTime += GetPauseDuration();
+            ResetDuration();
         }
 
+        if (Time.time >= nextWaveTime)
+        {
+            StartNewWave();
+
+            nextWaveTime = Time.time + waveDuration;
+        }
+
+        if (Time.time >= nextIntervalTime && !isSpawningResiduals)
+        {
+            if (currentInterval <= (int)(waveDuration/intervalDuration) && enemiesAlive <= maxEnemiesAlive)
+            {
+                SpawnIntervalEnemies();
+                currentInterval++;
+            }
+            nextIntervalTime = Time.time + intervalDuration;
+        }
     }
 
     void StartNewWave()
     {
-        spawnedEnemiesInCurrentWave = 0;
+        Debug.Log("StartNewWave");
+        enemiesSpawnedThisWave = 0;
+        currentInterval = 0;
+        isSpawningResiduals = false;
+
+        nextIntervalTime = Time.time + intervalDuration;
         spawnedWaves++;
 
-        while (spawnedEnemiesInCurrentWave < enemiesPerWave)
+        //Debug.Log($"Spawned wave {spawnedWaves} ");
+        SpawnIntervalEnemies();
+        currentInterval++;
+        nextIntervalTime = Time.time + intervalDuration;
+    }
+
+    void SpawnIntervalEnemies()
+    {
+        //Debug.Log("StartNewWave");
+        enemiesPerInterval = Mathf.RoundToInt(CalculateEnemiesForTime(Time.time));
+        //Debug.Log($"Spawning {enemiesPerInterval} enemies for interval {currentInterval + 1}");
+        for (int i = 0; i < enemiesPerInterval; i++)
         {
             SpawnEnemy();
+            enemiesSpawnedThisWave++;
         }
+
+    }
+
+    float CalculateEnemiesForTime(float timeInSeconds)
+    {
+        float adjustedTime = timeInSeconds % (float)(waveDuration * maxWaves);
+        return Mathf.CeilToInt(startEnemiesAmount + (adjustedTime / (float)(waveDuration * maxWaves)) * (totalEnemiesPerWave - startEnemiesAmount));
     }
 
     void SpawnEnemy()
@@ -70,21 +143,68 @@ public class EnemyManager : MonoBehaviour
             Debug.LogError("Enemy pool is not set.");
             return;
         }
-        var enemy = enemySpawner._pool.Get();
 
-        enemy.transform.position = GetRandomSpawnPosition();
-        enemy.OnRelease -= HandleEnemyDeath;
-        enemy.OnRelease += HandleEnemyDeath;
+        Enemy enemyToSpawn = null;
+        if (spawnedWaves % 2 == 0)
+        {
+            enemyToSpawn = enemySpawner.pools.Values.ElementAt(1).Get();
+            //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(1));
+        }
+        else
+        {
+            enemyToSpawn = enemySpawner.pools.Values.ElementAt(0).Get();
+            //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(0));
+        }
 
-        spawnedEnemiesInCurrentWave++;
-        currentEnemyCount++;
+        enemyToSpawn.transform.position = GetRandomSpawnPosition();
+        enemyToSpawn.OnRelease -= HandleEnemyRelease;
+        enemyToSpawn.OnRelease += HandleEnemyRelease;
+        enemyToSpawn.OnDeath -= HandleEnemyDeath;
+        enemyToSpawn.OnDeath += HandleEnemyDeath;
+
+        enemiesAlive++;
     }
 
-    private void HandleEnemyDeath()
+    void SpawnGem(Vector3 position, TypeXPGem _type)
     {
-        currentEnemyCount--;
+        if (gemSpawner == null)
+        {
+            Debug.LogError("Gem pool is not set.");
+            return;
+        }
+        var gem = gemSpawner._pool.Get();
 
-        if (currentEnemyCount < enemiesPerWave * spawnedWaves)
+        gem.SetTypeXPGem(_type);
+        gem.UpdateGemSprite(GetSpriteByType(_type));
+        gem.transform.position = position;
+    }
+
+    public Sprite GetSpriteByType(TypeXPGem type)
+    {
+        foreach (var sprite in gemSprites)
+        {
+            if (sprite.name == type.ToString())
+            {
+                return sprite;
+            }
+        }
+
+        Sprite defaultSprite = System.Array.Find(gemSprites, sprite => sprite.name == "DEFAULT");
+
+        return defaultSprite;
+    }
+
+    private void HandleEnemyDeath(Vector3 position, TypeXPGem _type)
+    {
+        enemiesAlive--;
+        SpawnGem(position,_type);
+    }
+
+    private void HandleEnemyRelease()
+    {
+        enemiesAlive--;
+
+        if (enemiesAlive < totalEnemiesPerWave * spawnedWaves)
         {
             SpawnEnemy();
         }
@@ -144,6 +264,7 @@ public class EnemyManager : MonoBehaviour
 
         return position;
     }
+
     void HandlePlayerMovementChanged(Vector2 movementVector)
     {
         playerMovementVector = movementVector;

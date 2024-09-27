@@ -1,26 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public ObjectPool<Enemy> _pool;
+    //public ObjectPool<Enemy> _pool;
     private EnemyManager enemyManager;
+    [SerializeField] private int _spawnCount = 50; 
+    public Dictionary<TypeEnemy, ObjectPool<Enemy>> pools = new Dictionary<TypeEnemy, ObjectPool<Enemy>>();
 
     private void Start()
     {
         enemyManager = GetComponent<EnemyManager>();
-        _pool = new ObjectPool<Enemy>(CreateEnemy, OnTakeEnemyFromPool, OnReturnEnemyToPool, OnDestroyEnemy, true, 50, 50);
 
+        foreach (var e in enemyManager.enemiesDict)
+        {
+            var prefab = e.Value;
+            if (prefab != null)
+            {
+                var _pool = new ObjectPool<Enemy>(()=>CreateEnemy(prefab), OnTakeEnemyFromPool, OnReturnEnemyToPool, OnDestroyEnemy, true, _spawnCount, _spawnCount);
+                pools.Add(e.Key, _pool);
+            }
+        }
     }
 
-    private Enemy CreateEnemy()
+    private Enemy CreateEnemy(Enemy _prefab)
     {
-        var enemy = Instantiate(enemyManager.enemy, enemyManager.GetRandomSpawnPosition(), Quaternion.identity);
+        var enemy = Instantiate(_prefab, enemyManager.GetRandomSpawnPosition(), Quaternion.identity);
         if (enemy != null)
         {
-            enemy.SetPool(_pool);
+            var pooledEnemy = pools[_prefab.GetTypeEnemy()];
+            enemy.SetPool(pooledEnemy);
         }
 
         return enemy;

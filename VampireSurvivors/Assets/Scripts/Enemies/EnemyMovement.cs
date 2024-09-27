@@ -7,10 +7,11 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyMovement : GameplayMonoBehaviour
 {
     protected Transform playerTransform;
     private Movement playerMovement;
+    public Animator animator;
 
     [Header("Parent Movement Settings")]
     [SerializeField] protected float moveSpeed = 0.3f;
@@ -39,8 +40,9 @@ public class EnemyMovement : MonoBehaviour
     private bool isEnemyClose;
     private bool isDodging = false;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerTransform = GameManager.Instance.player.GetComponent<Transform>();
         isDodging = false;
         canCheckDistance = false;
@@ -63,10 +65,25 @@ public class EnemyMovement : MonoBehaviour
             playerMovement.OnMovementChanged -= HandlePlayerMovementChanged;
             playerMovement.OnMovementChanged += HandlePlayerMovementChanged;
         }
+        originalAnimationSpeed = animator.speed;
     }
 
-    void Update()
+    protected override void PausableUpdate()
     {
+        base.UnPausableUpdate();
+        if (animator != null)
+        {
+            animator.speed = 0f;
+        }
+    }
+
+    protected override void UnPausableUpdate()
+    {
+        base.UnPausableUpdate();
+        if (animator != null)
+        {
+            animator.speed = originalAnimationSpeed;
+        }
         distanceToPlayer = GetDistanceToPlayer();
 
         isEnemyFar = distanceToPlayer > exclusionRange;
@@ -84,7 +101,7 @@ public class EnemyMovement : MonoBehaviour
         {
             FollowPlayer();
         }
-        if(!isEnemyClose && !isDodging)
+        if (!isEnemyClose && !isDodging)
         {
             Move();
         }

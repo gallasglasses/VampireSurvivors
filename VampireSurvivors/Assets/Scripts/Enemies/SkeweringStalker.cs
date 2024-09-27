@@ -11,16 +11,16 @@ public class SkeweringStalker : Enemy
         base.OnEnable();
         if (TryGetComponent<SkeweringStalkerMovement>(out SkeweringStalkerMovement skeweringStalkerMovement))
         {
-            skeweringStalkerMovement.OnExclusion += HandleDeath;
+            skeweringStalkerMovement.OnExclusion += HandleRelease;
         }
     }
     protected override void Unsubcribe()
     {
-        base.Unsubcribe(); // Unsubscribe from base events
+        base.Unsubcribe();
 
         if (skeweringStalkerMovement != null)
         {
-            skeweringStalkerMovement.OnExclusion -= HandleDeath;
+            skeweringStalkerMovement.OnExclusion -= HandleRelease;
         }
     }
 }

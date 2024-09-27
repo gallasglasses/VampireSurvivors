@@ -50,6 +50,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38252f3e409fc4e468477d416ce68bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 9145115112365263665}
+  bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _typeXPGem: 0
+  _type: 0
+  damage: 2
 --- !u!114 &3210155105835625151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,18 +67,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4148a92c17a10b4d870bc529051f795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.55
-  speedMultiplier: 2
+  animator: {fileID: 7614092375905936493}
+  moveSpeed: 1
+  speedMultiplier: 1.25
   accelerationTime: 0.5
-  minDistance: 0.15
-  detectionRange: 1
-  exclusionRange: 4
-  minTimeBeforeExclusion: 2
-  circleRadius: 0.15
-  spiralTightnessRange: {x: 0.1, y: 0.5}
+  minDistance: 1.5
+  detectionRange: 5
+  exclusionRange: 20
+  minTimeBeforeExclusion: 3
+  circleRadius: 2
+  spiralTightnessRange: {x: 0.5, y: 1}
   radiusIncreaseTime: 0.5
   waveFrequency: 5
-  waveAmplitude: 0.5
+  waveAmplitude: 2
 --- !u!114 &1270967955867098366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +93,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 2
+  maxHealthMultiplier: 1
+  healMultiplier: 1
+  increasingMultiplier: 0.1
+  healUpdateTime: 1
+  healModifier: 0.2
 --- !u!114 &2280679583236672187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,10 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275d87d8f49450246a02d9c4ec595b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dodgeSpeed: 0.5
-  dodgeDistance: 1.5
+  dodgeSpeed: 1.5
+  dodgeDistance: 2
   dodgeDuration: 0.2
-  detectionRadius: 0.2
+  detectionRadius: 1.5
   enemyMovement: {fileID: 3210155105835625151}
   projectileLayer:
     serializedVersion: 2
@@ -139,7 +150,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.018148988, y: 0.039895684}
+  m_Offset: {x: 0.0055444837, y: -0.005544506}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -150,7 +161,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.110281885, y: 0.09107298}
+  m_Size: {x: 0.57760656, y: 0.33028}
   m_EdgeRadius: 0
 --- !u!50 &8648729461848837988
 Rigidbody2D:
@@ -206,7 +217,7 @@ Transform:
   m_GameObject: {fileID: 8195984694143472219}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.023437686, y: -0.033876937, z: 0}
+  m_LocalPosition: {x: -0.035, y: -0.47, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

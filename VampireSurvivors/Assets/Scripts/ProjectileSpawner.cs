@@ -18,7 +18,7 @@ public class ProjectileSpawner : MonoBehaviour
 
     private Projectile CreateProjectile()
     {
-        var projectile = Instantiate(weaponComponent.projectile, weaponComponent.projectileTransform.position, weaponComponent.projectileRotation);
+        var projectile = Instantiate(weaponComponent.projectile, weaponComponent.transform.position, weaponComponent.projectileRotation);
         if (projectile != null)
         {
             projectile.SetPool(_pool);
@@ -29,10 +29,10 @@ public class ProjectileSpawner : MonoBehaviour
 
     private void OnTakeProjectileFromPool(Projectile projectile)
     {
-        projectile.transform.position = weaponComponent.projectileTransform.position;
-        projectile.transform.rotation = weaponComponent.projectileRotation;
-        projectile.SetDirection(weaponComponent.GetDirection());
-        projectile.SetVelocity();
+        //projectile.transform.position = weaponComponent.projectileTransform.position;
+        //projectile.transform.rotation = weaponComponent.projectileRotation;
+        //projectile.SetDirection(weaponComponent.GetDirection());
+        //projectile.SetVelocity();
 
         projectile.gameObject.SetActive(true);
     }

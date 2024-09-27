@@ -10,8 +10,11 @@ public class PlayerController : MonoBehaviour
     private Movement playerMovement;
     private InputAction move;
     private InputAction fire;
+    private InputAction pause;
+    [SerializeField] private UIManager uiManager;
 
     private bool isLMBPressed = false;
+    private bool isSpaceFirstPressed = false;
 
     public event Action<bool> OnAttack;
 
@@ -30,12 +33,17 @@ public class PlayerController : MonoBehaviour
         fire.performed += Fire;
         fire.canceled += Fire;
 
+        pause = playerInput.UI.Pause;
+        pause.Enable();
+        pause.performed += Pause;
+
     }
     private void OnDisable()
     {
         move.Disable();
         fire.Disable();
     }
+
     void Start()
     {
         playerMovement = GameManager.Instance.player.GetComponent<Movement>();
@@ -63,5 +71,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Pause(InputAction.CallbackContext callback)
+    {
+        if (callback.performed)
+        {
+            HandlePause();
+        }
+    }
 
+    public void HandlePause()
+    {
+        if (!isSpaceFirstPressed)
+        {
+            GameManager.Instance.Pause();
+        }
+        else
+        {
+            GameManager.Instance.UnPause();
+        }
+        uiManager.TogglePauseMenu();
+        isSpaceFirstPressed = !isSpaceFirstPressed;
+    }
+
+    public void HandleDeath() // rewrite! bad code
+    {
+        GameManager.Instance.Pause();
+        uiManager.ToggleDeadMenu();
+    }
 }

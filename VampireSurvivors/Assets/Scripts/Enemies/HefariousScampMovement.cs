@@ -65,11 +65,11 @@ public class HefariousScampMovement : EnemyMovement
 
         // Calculate the tightness of the spiral depending on the distance
         float maxDistance = Mathf.Max(minDistance, distanceToPlayer);
-        float t = Mathf.InverseLerp(minDistance, maxDistance, distanceToPlayer);
+        float t = Mathf.InverseLerp(minDistance, initialDistanceToPlayer, maxDistance);
         float spiralTightness = Mathf.Lerp(spiralTightnessRange.y, spiralTightnessRange.x, t);
 
         float radiusInterpolation = Mathf.Clamp01(Time.time / radiusIncreaseTime);
-        float initialRadius = Mathf.Lerp(minDistance, distanceToPlayer, radiusInterpolation);
+        float initialRadius = Mathf.Lerp(minDistance, distanceToPlayer - spiralTightness, radiusInterpolation);
 
         angle += currentSpeed * Time.deltaTime * currentDirection;
         angle = Mathf.Repeat(angle, Mathf.PI * 2f);
@@ -79,7 +79,7 @@ public class HefariousScampMovement : EnemyMovement
             playerTransform.position.y + Mathf.Sin(angle) * initialRadius
         );
 
-        transform.position = Vector2.Lerp(transform.position, spiralPosition, Time.deltaTime * accelerationTime * currentSpeedMultiplier);
+        transform.position = Vector2.Lerp(transform.position, spiralPosition, Time.deltaTime * accelerationTime /** currentSpeedMultiplier*/);
     }
 
     void MoveInCircleAroundPlayer()

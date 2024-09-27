@@ -2,25 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using System;
 
-public class Enemy : MonoBehaviour
+public class Enemy : GameplayMonoBehaviour
 {
     private HealthComponent healthComponent;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private ParticleSystem bloodEffect;
+    private ParticleSystem bloodSpawnEffect;
+    
 
     private ObjectPool<Enemy> _pool;
     private bool _hasBeenReleased = false;
+    [SerializeField] private TypeXPGem _typeXPGem;
+    [SerializeField] private TypeEnemy _type;
+    [SerializeField] private float damage;
 
-    public delegate void OnReleaseEvent();
-    public event OnReleaseEvent OnRelease;
+    public delegate void OnDeathEvent(Vector3 position, TypeXPGem _type);
+    public event OnDeathEvent OnDeath;
+    public event Action OnRelease;
+
 
     protected virtual void OnEnable()
     {
+        spriteRenderer.color = Color.white;
         if (TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
         {
             healthComponent.OnDeath += HandleDeath;
+            healthComponent.OnTakeDamage += HandleDamage;
         }
 
         _hasBeenReleased = false;
+    }
+
+    protected override void UnPausableUpdate() 
+    {
+        if (bloodSpawnEffect != null && bloodSpawnEffect.isPaused)
+        {
+            bloodSpawnEffect.Play();
+        }
+    }
+
+    protected override void PausableUpdate() 
+    {
+        if (bloodSpawnEffect != null && bloodSpawnEffect.isPlaying)
+        {
+            bloodSpawnEffect.Pause();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -37,11 +65,64 @@ public class Enemy : MonoBehaviour
             {
                 Debug.LogWarning("Movement component not found on the Player.");
             }
+
+            if (other.TryGetComponent<HealthComponent>(out HealthComponent playerHealth))
+            {
+                playerHealth.TakeDamage(damage);
+            }
         }
+    }
+
+    private IEnumerator Flash()
+    {
+        spriteRenderer.color = Color.red;
+        float elapsedTime = 0f;
+        float duration = 0.5f;
+
+        while (elapsedTime < duration)
+        {
+            if (!Paused)
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            else
+            {
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+
+        }
+
+        spriteRenderer.color = Color.white;
+    }
+
+    protected void HandleDamage(float receivedDamage)
+    {
+        //Debug.Log("HandleDamage");
+        StartCoroutine(Flash());
+        if (bloodEffect != null)
+        {
+            bloodSpawnEffect = Instantiate(bloodEffect, transform.position, Quaternion.identity);
+        }
+        // receivedDamage - UI ?
     }
 
     protected void HandleDeath()
     {
+        //Debug.Log("HandleDeath");
+        Unsubcribe();
+
+        if (!_hasBeenReleased)
+        {
+            _hasBeenReleased = true;
+            OnDeath?.Invoke(transform.position, _typeXPGem);
+            _pool.Release(this);
+        }
+    }
+
+    protected void HandleRelease()
+    {
+        //Debug.Log("HandleRelease");
         Unsubcribe();
 
         if (!_hasBeenReleased)
@@ -62,11 +143,17 @@ public class Enemy : MonoBehaviour
         _pool = pool;
     }
 
+    public TypeEnemy GetTypeEnemy()
+    {
+        return _type;
+    }
+
     protected virtual void Unsubcribe()
     {
         if (healthComponent != null)
         {
             healthComponent.OnDeath -= HandleDeath;
+            healthComponent.OnTakeDamage -= HandleDamage;
         }
     }
 }

@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Movement : MonoBehaviour
+public class Movement : GameplayMonoBehaviour
 {
     [SerializeField] public float speed;
+    [SerializeField] private float powerUpMultiplier = 1f;
+    [SerializeField] private float increasingMultiplier = 0.1f;
+
     private float originalSpeed;
     private SpriteRenderer spriteRenderer;
     private Vector2 direction = Vector2.zero;
@@ -19,10 +22,25 @@ public class Movement : MonoBehaviour
     {
         spriteRenderer = animator.GetComponent<SpriteRenderer>();
         originalSpeed = speed;
+        originalAnimationSpeed = animator.speed;
     }
 
-    private void FixedUpdate()
+    protected override void PausableFixedUpdate()
     {
+        base.PausableFixedUpdate();
+        if (animator != null)
+        {
+            animator.speed = 0f;
+        }
+    }
+
+    protected override void UnPausableFixedUpdate()
+    {
+        base.UnPausableFixedUpdate();
+        if (animator != null)
+        {
+            animator.speed = originalAnimationSpeed;
+        }
         this.transform.position += new Vector3(direction.x * originalSpeed * Time.deltaTime, direction.y * originalSpeed * Time.deltaTime, this.transform.position.z); 
     }
 
@@ -41,6 +59,7 @@ public class Movement : MonoBehaviour
             }
         }
     }
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
@@ -61,12 +80,22 @@ public class Movement : MonoBehaviour
 
     public void Move(Vector2 newDirection)
     {
-        if (newDirection != direction)
+        if(!Paused)
         {
-            direction = newDirection;
-            OnMovementChanged?.Invoke(direction);
-        }
+            if (newDirection != direction)
+            {
+                direction = newDirection;
+                OnMovementChanged?.Invoke(direction);
+            }
 
-        AnimateMovement();
+            AnimateMovement();
+        }
+    }
+
+    public void PowerUpSpeed()
+    {
+        powerUpMultiplier = powerUpMultiplier * increasingMultiplier + powerUpMultiplier;
+        speed = speed * powerUpMultiplier;
+        Debug.Log("PowerUpSpeed");
     }
 }

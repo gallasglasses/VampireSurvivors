@@ -1,34 +1,88 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SkeweringStalkerMovement : EnemyMovement
 {
     [Header("Child Movement Settings")]
     [SerializeField] private float zigzagFrequency = 5f;
-    [SerializeField] private float zigzagAmplitude = 1.5f;
     [SerializeField] private Vector2 zigzagAmpVec;
-    [SerializeField] private Vector2 angleRange;
+    [SerializeField] private float angleRange;
+    [SerializeField] private float dashInterval = 3f;
+    [SerializeField] private float dashDuration = 0.5f;
 
-    private Vector2 movementDirection = Vector2.zero;
     private Vector2 perpendicularDirection = Vector2.zero;
     private Vector2 deviatedDirection;
+    private Vector3 dashStartPosition;
+    private Vector3 dashEndPosition;
+
     private bool isMoving = false;
+    private bool isInFollowingMode = true;
+    private bool isDashing = false;
+
+    private float dashTimer;
+    private float dashTime;
 
     protected override void Awake()
     {
         base.Awake();
+        isInFollowingMode = true;
         isMoving = false;
-        movementDirection = Vector2.zero;
         perpendicularDirection = Vector2.zero;
     }
 
     protected override void FollowPlayer()
     {
         isMoving = false;
-        ChangeCurrentSettings();
-        transform.position += (Vector3)directionToPlayer * currentSpeed * Time.deltaTime;
+        isInFollowingMode = distanceToPlayer > minDistance;
+        if (isInFollowingMode)
+        {
+            isDashing = false;
+            ChangeCurrentSettings();
+            transform.position += (Vector3)directionToPlayer * currentSpeed * Time.deltaTime;
+        }
+        else
+        {
+            DashToPlayer();
+        }
+
         base.FollowPlayer();
+    }
+
+    private void DashToPlayer()
+    {
+        dashTimer += Time.deltaTime;
+
+        if (isDashing)
+        {
+            dashTime += Time.deltaTime;
+
+            transform.position = Vector3.Lerp(dashStartPosition, dashEndPosition, dashTime / dashDuration);
+
+            if (dashTime >= dashDuration)
+            {
+                isDashing = false;
+                dashTime = 0f;
+            }
+        }
+        else
+        {
+            Vector3 offset = new Vector3(Mathf.Cos(Time.time * moveSpeed), Mathf.Sin(Time.time * moveSpeed), 0) * minDistance;
+
+            transform.position = Vector3.Lerp(transform.position, playerTransform.position + offset, moveSpeed * Time.deltaTime);
+
+            if (dashTimer >= dashInterval)
+            {
+                dashStartPosition = transform.position;
+                Vector3 directionThroughPlayer = (transform.position - playerTransform.position).normalized;
+                dashEndPosition = playerTransform.position - directionThroughPlayer * minDistance;
+
+                isDashing = true;
+                dashTimer = 0f;
+            }
+        }
     }
 
     protected override void Move()
@@ -36,27 +90,14 @@ public class SkeweringStalkerMovement : EnemyMovement
 
         if (!isMoving)
         {
-            //Debug.Log("directionToPlayer " + directionToPlayer);
-            //if (Mathf.Abs(directionToPlayer.x) > Mathf.Abs(directionToPlayer.y))
-            //{
-            //    movementDirection = directionToPlayer.x > 0 ? Vector2.right : Vector2.left;
-            //}
-            //else
-            //{
-            //    movementDirection = directionToPlayer.y > 0 ? Vector2.up : Vector2.down;
-            //}
+            float randomDeviation = Random.Range(-angleRange, angleRange);
 
-            //deviatedDirection = ShiftDirection(GetRandomAngle());
-            float randomAngle = GetRandomAngle();
-            deviatedDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
-
-            perpendicularDirection = new Vector2(-deviatedDirection.y, deviatedDirection.x);
-            //perpendicularDirection = new Vector2(-movementDirection.y, movementDirection.x);
+            deviatedDirection = Quaternion.Euler(0, 0, randomDeviation) * directionToPlayer;
+            perpendicularDirection = new Vector2(-directionToPlayer.y, directionToPlayer.x);
 
             isMoving = true;
 
         }
-        //Vector2 newDirection = (movementDirection + perpendicularDirection * GetZigZagOffset()).normalized;
         Vector2 newDirection = (deviatedDirection + perpendicularDirection * GetZigZagOffset()).normalized;
 
         transform.position += (Vector3)newDirection * moveSpeed * Time.deltaTime;
@@ -65,33 +106,9 @@ public class SkeweringStalkerMovement : EnemyMovement
 
     private float GetZigZagOffset()
     {
-        //Debug.Log("distanceToPlayer " + distanceToPlayer);
-        Debug.Log("initialDistanceToPlayer " + initialDistanceToPlayer);
         float maxDistance = Mathf.Max(minDistance, distanceToPlayer);
         float t = Mathf.InverseLerp(minDistance, initialDistanceToPlayer, maxDistance);
-        float zigzagAmpLerp = Mathf.Lerp(zigzagAmpVec.x, zigzagAmpVec.y, t);
-        Debug.Log("zigzagAmpLerp " + zigzagAmpLerp);
+        float zigzagAmpLerp = Mathf.Lerp(zigzagAmpVec.y, zigzagAmpVec.x, t);
         return Mathf.Sin(Time.time * zigzagFrequency) * zigzagAmpLerp;
-    }
-
-    private Vector2 ShiftDirection(float angle)
-    {
-        float newX = movementDirection.x * Mathf.Cos(angle) - movementDirection.y * Mathf.Sin(angle);
-        float newY = movementDirection.x * Mathf.Sin(angle) + movementDirection.y * Mathf.Cos(angle);
-        return new Vector2(newX, newY);
-    }
-
-    private float GetRandomAngle()
-    {
-        float angle = Random.Range(angleRange.x, angleRange.y) * Mathf.Deg2Rad;
-        if (movementDirection.x > 0)
-        {
-            angle = movementDirection.y > 0 ? angle : - angle;
-        }
-        else
-        {
-            angle = movementDirection.y > 0 ? Mathf.PI + angle : (3 * Mathf.PI)/2 + angle;
-        }
-        return angle;
     }
 }

@@ -11,16 +11,16 @@ public class HefariousScamp : Enemy
         base.OnEnable();
         if (TryGetComponent<HefariousScampMovement>(out HefariousScampMovement hefariousScampMovement))
         {
-            hefariousScampMovement.OnExclusion += HandleDeath;
+            hefariousScampMovement.OnExclusion += HandleRelease;
         }
     }
     protected override void Unsubcribe()
     {
-        base.Unsubcribe(); // Unsubscribe from base events
+        base.Unsubcribe();
 
         if (hefariousScampMovement != null)
         {
-            hefariousScampMovement.OnExclusion -= HandleDeath;
+            hefariousScampMovement.OnExclusion -= HandleRelease;
         }
     }
 }

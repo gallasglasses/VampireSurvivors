@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDodge : MonoBehaviour
+public class EnemyDodge : GameplayMonoBehaviour
 {
     [SerializeField] private float dodgeSpeed = 2f;
     [SerializeField] private float dodgeDistance = 1f;
@@ -18,8 +18,14 @@ public class EnemyDodge : MonoBehaviour
     private float lastCheckTime = 0f;
 
 
-    void Update()
+    protected override void UnPausableUpdate()
     {
+        if (GetPauseDuration() > 0)
+        {
+            lastCheckTime += GetPauseDuration();
+            ResetDuration();
+        }
+
         if (Time.time >= lastCheckTime + checkInterval)
         {
             lastCheckTime = Time.time;

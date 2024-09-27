@@ -3,26 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Projectile : MonoBehaviour
+public class Projectile : GameplayMonoBehaviour
 {
-    public float force = 2.5f;
-    public float damage = 1f;
-    public float deactivateTime = 15f;
+    [SerializeField] private float force = 10f;
+    [SerializeField] private float damage = 1f;
+    private float powerUpDamage = 1;
+    [SerializeField] private float deactivateTime = 5f;
 
-    private Vector3 mousePosition;
-    private Camera mainCamera;
     private Rigidbody2D body;
     private Vector3 direction;
+
     private ObjectPool<Projectile> _pool;
     private Coroutine deactivateProjectileAfterTimeCoroutine;
 
     private bool _hasBeenReleased = false;
+    private bool _hasBeenPaused = false;
 
-    private void Awake()
+    protected override void Awake()
     {
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-
         body = GetComponent<Rigidbody2D>();
+    }
+
+    protected override void PausableFixedUpdate()
+    {
+        base.PausableFixedUpdate(); 
+        _hasBeenPaused = true;
+        body.velocity = Vector2.zero; 
+        body.isKinematic = true;
+    }
+
+    protected override void UnPausableFixedUpdate()
+    {
+        base.PausableUpdate();
+        if (GetPauseDuration() > 0)
+        {
+            ResetDuration();
+        }
+        if(_hasBeenPaused)
+        {
+            body.isKinematic = false;
+            body.velocity = new Vector2(direction.x, direction.y).normalized * force;
+            _hasBeenPaused = false;
+        }
     }
 
     private void OnEnable()
@@ -38,17 +60,25 @@ public class Projectile : MonoBehaviour
         direction = dir;
     }
 
+    public void SetPowerUpDamage(float powerUp)
+    { 
+        powerUpDamage = powerUp; 
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (_hasBeenReleased) return;
 
-        if (collision.gameObject.TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
+        if (collision.CompareTag("Enemy"))
         {
-            healthComponent.TakeDamage(damage);
-        }
+            if (collision.gameObject.TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
+            {
+                healthComponent.TakeDamage(damage * powerUpDamage);
+            }
 
-        _hasBeenReleased = true;
-        _pool.Release(this);
+            _hasBeenReleased = true;
+            _pool.Release(this);
+        }
     }
 
     public void SetPool(ObjectPool<Projectile> pool)
@@ -61,8 +91,15 @@ public class Projectile : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < deactivateTime)
         {
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            if(!Paused)
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            else
+            {
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
         }
 
         if (!_hasBeenReleased)

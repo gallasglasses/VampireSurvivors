@@ -10,14 +10,19 @@ public class Collectable : MonoBehaviour
 
         if (player)
         {
-            Debug.Log("OnTriggerEnter2D");
+            //Debug.Log("OnTriggerEnter2D");
             if(CanBeCollected(player))
-                Destroy(this.gameObject);
+                HandleDestroy();
         }
     }
 
     protected virtual bool CanBeCollected(Player _player)
     {
         return false;
+    }
+
+    protected virtual void HandleDestroy()
+    {
+        Destroy(this.gameObject);
     }
 }

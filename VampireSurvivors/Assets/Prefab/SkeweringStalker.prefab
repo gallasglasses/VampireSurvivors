@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4545832915833997883}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.023437686, y: -0.033876937, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -156,6 +156,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4ca7db61af57d4c9d364bc15ea3a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 3880605058528045231}
+  bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _typeXPGem: 1
+  _type: 1
+  damage: 5
 --- !u!114 &1864538702348697238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,17 +173,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b7e5c26baa34e43aef7c85d93ea508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.6
-  speedMultiplier: 2
+  animator: {fileID: 7836862130010979482}
+  moveSpeed: 1.2
+  speedMultiplier: 1.4
   accelerationTime: 0.5
-  minDistance: 0.15
-  detectionRange: 1
-  exclusionRange: 4
-  minTimeBeforeExclusion: 2
-  zigzagFrequency: 1
-  zigzagAmplitude: 1.5
-  zigzagAmpVec: {x: 1.5, y: 10}
-  angleRange: {x: 30, y: 45}
+  minDistance: 2
+  detectionRange: 6
+  exclusionRange: 20
+  minTimeBeforeExclusion: 3
+  zigzagFrequency: 2
+  zigzagAmpVec: {x: 1.5, y: 3.5}
+  angleRange: 15
+  dashInterval: 3
+  dashDuration: 0.2
 --- !u!114 &3850590918494927158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +199,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 4
+  maxHealthMultiplier: 1
+  healMultiplier: 1
+  increasingMultiplier: 0.1
+  healUpdateTime: 1
+  healModifier: 0.2
 --- !u!114 &4200089756768295508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,10 +216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275d87d8f49450246a02d9c4ec595b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dodgeSpeed: 0.5
-  dodgeDistance: 1.5
+  dodgeSpeed: 1.5
+  dodgeDistance: 2
   dodgeDuration: 0.2
-  detectionRadius: 0.2
+  detectionRadius: 1
   enemyMovement: {fileID: 1864538702348697238}
   projectileLayer:
     serializedVersion: 2
@@ -244,7 +256,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.023275048, y: 0.041060697}
+  m_Offset: {x: 0.0027750582, y: 0.4717734}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -255,7 +267,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.07952553, y: 0.15118769}
+  m_Size: {x: 0.4994965, y: 0.93932676}
   m_EdgeRadius: 0
 --- !u!50 &6582631378610612633
 Rigidbody2D:
