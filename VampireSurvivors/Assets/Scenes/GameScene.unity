@@ -1157,6 +1157,7 @@ GameObject:
   - component: {fileID: 1428274807}
   - component: {fileID: 1428274806}
   - component: {fileID: 1428274809}
+  - component: {fileID: 1428274810}
   m_Layer: 0
   m_Name: EnemyManager
   m_TagString: Untagged
@@ -1192,6 +1193,9 @@ MonoBehaviour:
   waveDuration: 60
   maxWaves: 10
   intervalDuration: 10
+  enemyTypes:
+  - typeName: HefariousScamp
+  - typeName: SkeweringStalker
   enemies:
     dictionary:
     - _myKey: 0
@@ -1231,6 +1235,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e36ef1a71df8342b77932a0ac4caa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1428274810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428274805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f48cb0fb4b9fa041a49191276c13a2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyData:
+    dictionary: []
 --- !u!114 &1513057900 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4571565846632965044, guid: 0e2c73c182812b641be90e6063f42d38, type: 3}
