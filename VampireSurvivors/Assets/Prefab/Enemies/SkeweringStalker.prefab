@@ -116,9 +116,9 @@ GameObject:
   m_Component:
   - component: {fileID: 326450573234309091}
   - component: {fileID: 4934416091218842360}
-  - component: {fileID: 1864538702348697238}
   - component: {fileID: 3850590918494927158}
   - component: {fileID: 4200089756768295508}
+  - component: {fileID: 784810754436292556}
   - component: {fileID: 5569572985852886025}
   - component: {fileID: 6582631378610612633}
   m_Layer: 7
@@ -156,36 +156,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4ca7db61af57d4c9d364bc15ea3a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 3880605058528045231}
   bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
   _typeXPGem: 1
   _type: 1
   damage: 5
---- !u!114 &1864538702348697238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5155654700119329496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b7e5c26baa34e43aef7c85d93ea508, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 7836862130010979482}
-  moveSpeed: 1.2
-  speedMultiplier: 1.4
-  accelerationTime: 0.5
-  minDistance: 2
-  detectionRange: 6
-  exclusionRange: 20
-  minTimeBeforeExclusion: 3
-  zigzagFrequency: 2
-  zigzagAmpVec: {x: 1.5, y: 3.5}
-  angleRange: 15
-  dashInterval: 3
-  dashDuration: 0.2
 --- !u!114 &3850590918494927158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,10 +194,47 @@ MonoBehaviour:
   dodgeDistance: 2
   dodgeDuration: 0.2
   detectionRadius: 1
-  enemyMovement: {fileID: 1864538702348697238}
+  enemyMovement: {fileID: 0}
   projectileLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &784810754436292556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5155654700119329496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7247234370762194e976f5030fef140c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  commonMovementSettings:
+    _moveSpeed: 0.5
+    _speedMultiplier: 4
+    _accelerationTime: 2.5
+    _moveType: 1
+    _followType: 3
+    _actionType: 0
+  rangeMovementSettings:
+    _minDistance: 0.1
+    _detectionRange: 2
+    _exclusionRange: 4
+    _minTimeBeforeExclusion: 3
+  waveMovementSettings:
+    _waveAmplitudeRange: {x: 0, y: 0}
+    _waveFrequency: 0
+    _angleRange: 0
+  dashActionSettings:
+    _dashInterval: 1
+    _dashDuration: 5
+  spiralMovementSettings:
+    _spiralTightnessRange: {x: 0, y: 0}
+    _spiralRadiusIncreaseTime: 0
+  circleMovementSettings:
+    _circleRadius: 0
 --- !u!61 &5569572985852886025
 BoxCollider2D:
   m_ObjectHideFlags: 0

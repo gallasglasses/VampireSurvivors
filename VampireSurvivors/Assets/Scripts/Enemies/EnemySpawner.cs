@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
     //public ObjectPool<Enemy> _pool;
     private EnemyManager enemyManager;
     [SerializeField] private int _spawnCount = 50; 
-    public Dictionary<TypeEnemy, ObjectPool<Enemy>> pools = new Dictionary<TypeEnemy, ObjectPool<Enemy>>();
+    public Dictionary<EEnemyType, ObjectPool<Enemy>> pools = new Dictionary<EEnemyType, ObjectPool<Enemy>>();
 
     private void Start()
     {

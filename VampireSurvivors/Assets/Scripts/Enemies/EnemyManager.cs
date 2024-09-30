@@ -6,10 +6,10 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public enum TypeEnemy
+[System.Serializable]
+public class EnemyType
 {
-    HefariousScamp,
-    SkeweringStalker
+    public string typeName;
 }
 
 public class EnemyManager : GameplayMonoBehaviour
@@ -25,9 +25,9 @@ public class EnemyManager : GameplayMonoBehaviour
     private bool isSpawningResiduals = false;
 
     [Header("Enemy Spawn Settings")]
-
-    [SerializeField] private MyDictionary<TypeEnemy, Enemy> enemies;
-    public Dictionary<TypeEnemy, Enemy> enemiesDict = new Dictionary<TypeEnemy, Enemy>();
+    [SerializeField] private List<EnemyType> enemyTypes = new List<EnemyType>();
+    [SerializeField] private MyDictionary<EEnemyType, Enemy> enemies;
+    public Dictionary<EEnemyType, Enemy> enemiesDict = new Dictionary<EEnemyType, Enemy>();
 
     private EnemySpawner enemySpawner;
     [SerializeField] private Vector2 spawnArea;

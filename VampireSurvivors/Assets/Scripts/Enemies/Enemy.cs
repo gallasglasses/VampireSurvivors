@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using System;
+using static EnemyDataLoader;
+
+public enum EEnemyType
+{
+    HefariousScamp,
+    SkeweringStalker
+}
 
 public class Enemy : GameplayMonoBehaviour
 {
+    private EnemyDataLoader enemyDataLoader; 
     private HealthComponent healthComponent;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    private EnemyMovement enemyMovement;
+    private GameObject visualsObject;
+    private SpriteRenderer spriteRenderer;
     [SerializeField] private ParticleSystem bloodEffect;
     private ParticleSystem bloodSpawnEffect;
     
@@ -15,7 +25,7 @@ public class Enemy : GameplayMonoBehaviour
     private ObjectPool<Enemy> _pool;
     private bool _hasBeenReleased = false;
     [SerializeField] private TypeXPGem _typeXPGem;
-    [SerializeField] private TypeEnemy _type;
+    [SerializeField] private EEnemyType _type;
     [SerializeField] private float damage;
 
     public delegate void OnDeathEvent(Vector3 position, TypeXPGem _type);
@@ -26,13 +36,46 @@ public class Enemy : GameplayMonoBehaviour
     protected virtual void OnEnable()
     {
         spriteRenderer.color = Color.white;
-        if (TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
+        if (healthComponent = GetComponent<HealthComponent>())
         {
             healthComponent.OnDeath += HandleDeath;
             healthComponent.OnTakeDamage += HandleDamage;
         }
+        if (enemyMovement = GetComponent<EnemyMovement>())
+        {
+            enemyMovement.RangeMovementSettings.OnExclusion += HandleRelease;
+        }
 
         _hasBeenReleased = false;
+    }
+
+    void Start()
+    {
+        visualsObject = new GameObject("EnemyVisuals");
+        visualsObject.transform.parent = this.transform;
+        visualsObject.transform.localPosition = Vector3.zero;
+
+        SpriteRenderer spriteRenderer = visualsObject.AddComponent<SpriteRenderer>();
+        Animator animator = visualsObject.AddComponent<Animator>();
+
+        if (enemyDataLoader = GetComponent<EnemyDataLoader>())
+        {
+            var enemyData = enemyDataLoader.GetEnemyData(_type);
+            spriteRenderer.sprite = GetEnemySprite(enemyData.spritePath);
+            animator.runtimeAnimatorController = GetEnemyAnimatorController(enemyData.animatorControllerPath);
+        }
+
+        spriteRenderer.sortingOrder = 1;
+    }
+
+    private Sprite GetEnemySprite(string spritePath)
+    {
+        return Resources.Load<Sprite>("Sprites/EnemySprite");
+    }
+
+    private RuntimeAnimatorController GetEnemyAnimatorController(string animatorControllerPath)
+    {
+        return Resources.Load<RuntimeAnimatorController>("Animators/EnemyAnimatorController");
     }
 
     protected override void UnPausableUpdate() 
@@ -143,7 +186,7 @@ public class Enemy : GameplayMonoBehaviour
         _pool = pool;
     }
 
-    public TypeEnemy GetTypeEnemy()
+    public EEnemyType GetTypeEnemy()
     {
         return _type;
     }
@@ -154,6 +197,10 @@ public class Enemy : GameplayMonoBehaviour
         {
             healthComponent.OnDeath -= HandleDeath;
             healthComponent.OnTakeDamage -= HandleDamage;
+        }
+        if (enemyMovement != null)
+        {
+            enemyMovement.RangeMovementSettings.OnExclusion -= HandleRelease;
         }
     }
 }
