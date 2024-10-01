@@ -24,6 +24,27 @@ public class HealthComponent : GameplayMonoBehaviour
     public delegate void OnTakeDamageEvent(float _damage);
     public event OnTakeDamageEvent OnTakeDamage;
 
+    public float MaxHealth
+    {
+        get => maxHealth;
+        set => maxHealth = value;
+    }
+    public void Initialize(
+        float maxHealth, 
+        float maxHealthMultiplier, 
+        float healMultiplier, 
+        float increasingMultiplier, 
+        float healUpdateTime, 
+        float healModifier)
+    {
+        this.maxHealth = maxHealth;
+        this.maxHealthMultiplier = maxHealthMultiplier;
+        this.healMultiplier = healMultiplier;
+        this.increasingMultiplier = increasingMultiplier;
+        this.healUpdateTime = healUpdateTime;
+        this.healModifier = healModifier;
+    }
+
     private void OnEnable()
     {
         SetHealth(maxHealth);
@@ -61,7 +82,7 @@ public class HealthComponent : GameplayMonoBehaviour
         if (damage <= 0.0f || IsDead()) return;
         SetHealth(health - damage);
 
-        //Debug.Log($"TakeDamage {damage}");
+        //Debug.Log($"TakeDamage {_damage}");
         if (OnTakeDamage != null)
         {
             OnTakeDamage?.Invoke(damage);

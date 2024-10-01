@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 1574623859278580689}
   - component: {fileID: 4016363180581210088}
   - component: {fileID: 1270967955867098366}
+  - component: {fileID: 8802773259714935834}
   - component: {fileID: 2280679583236672187}
   - component: {fileID: 5496586452052836413}
   - component: {fileID: 8648729461848837988}
-  - component: {fileID: 8802773259714935834}
   m_Layer: 7
   m_Name: HefariousScamp
   m_TagString: Enemy
@@ -50,10 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38252f3e409fc4e468477d416ce68bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _type: HefariousScamp
   _typeXPGem: 0
-  _type: 0
-  damage: 2
+  _damage: 2
+  _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
 --- !u!114 &1270967955867098366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,6 +72,43 @@ MonoBehaviour:
   increasingMultiplier: 0.1
   healUpdateTime: 1
   healModifier: 0.2
+--- !u!114 &8802773259714935834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709989548929342470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7247234370762194e976f5030fef140c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  commonMovementSettings:
+    _moveSpeed: 1
+    _speedMultiplier: 1.25
+    _accelerationTime: 0.5
+    _moveType: 1
+    _followType: 0
+    _actionType: 1
+    _animator: {fileID: 7614092375905936493}
+  rangeMovementSettings:
+    _minDistance: 1.5
+    _detectionRange: 5
+    _exclusionRange: 20
+    _minTimeBeforeExclusion: 3
+  waveMovementSettings:
+    _waveAmplitudeRange: {x: 2, y: 2}
+    _waveFrequency: 5
+    _angleRange: 0
+  dashActionSettings:
+    _dashInterval: 0
+    _dashDuration: 0
+  spiralMovementSettings:
+    _spiralTightnessRange: {x: 0.5, y: 1}
+    _spiralRadiusIncreaseTime: 0.5
+  circleMovementSettings:
+    _circleRadius: 1.5
 --- !u!114 &2280679583236672187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +125,7 @@ MonoBehaviour:
   dodgeDistance: 2
   dodgeDuration: 0.2
   detectionRadius: 1.5
-  enemyMovement: {fileID: 0}
+  enemyMovement: {fileID: 8802773259714935834}
   projectileLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -164,43 +201,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &8802773259714935834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 709989548929342470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7247234370762194e976f5030fef140c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  commonMovementSettings:
-    _moveSpeed: 0.3
-    _speedMultiplier: 4
-    _accelerationTime: 2.5
-    _moveType: 0
-    _followType: 0
-    _actionType: 0
-  rangeMovementSettings:
-    _minDistance: 0.1
-    _detectionRange: 2
-    _exclusionRange: 4
-    _minTimeBeforeExclusion: 3
-  waveMovementSettings:
-    _waveAmplitudeRange: {x: 0, y: 0}
-    _waveFrequency: 0
-    _angleRange: 0
-  dashActionSettings:
-    _dashInterval: 0
-    _dashDuration: 0
-  spiralMovementSettings:
-    _spiralTightnessRange: {x: 0, y: 0}
-    _spiralRadiusIncreaseTime: 0
-  circleMovementSettings:
-    _circleRadius: 0
 --- !u!1 &8195984694143472219
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Pool;
 using System;
 using static EnemyDataLoader;
+using Unity.VisualScripting;
+using UnityEditor.Animations;
 
 public enum EEnemyType
 {
@@ -13,29 +15,67 @@ public enum EEnemyType
 
 public class Enemy : GameplayMonoBehaviour
 {
+    [SerializeField] private string _type;
+    [SerializeField] private TypeXPGem _typeXPGem;
+    [SerializeField] private float _damage;
+    [SerializeField] private ParticleSystem _bloodEffect;
+
     private EnemyDataLoader enemyDataLoader; 
     private HealthComponent healthComponent;
     private EnemyMovement enemyMovement;
-    private GameObject visualsObject;
     private SpriteRenderer spriteRenderer;
-    [SerializeField] private ParticleSystem bloodEffect;
     private ParticleSystem bloodSpawnEffect;
-    
-
     private ObjectPool<Enemy> _pool;
     private bool _hasBeenReleased = false;
-    [SerializeField] private TypeXPGem _typeXPGem;
-    [SerializeField] private EEnemyType _type;
-    [SerializeField] private float damage;
 
     public delegate void OnDeathEvent(Vector3 position, TypeXPGem _type);
     public event OnDeathEvent OnDeath;
     public event Action OnRelease;
 
+    public string Type
+    {
+        get => _type;
+        set => _type = value;
+    }
+    public TypeXPGem TypeXPGem
+    {
+        get => _typeXPGem;
+        set => _typeXPGem = value;
+    }
+    public float Damage
+    {
+        get => _damage;
+        set => _damage = value;
+    }
+    public ParticleSystem BloodEffect
+    {
+        get => _bloodEffect;
+        set => _bloodEffect = value;
+    }
+
+    public void Initialize(
+        string type, 
+        TypeXPGem typeXPGem, 
+        float damage, 
+        ParticleSystem bloodEffect)
+    {
+        this.Type = type;
+        this.TypeXPGem = typeXPGem;
+        this.Damage = damage;
+        this.BloodEffect = bloodEffect;
+    }
+
+    public string GetTypeEnemy()
+    {
+        return _type;
+    }
 
     protected virtual void OnEnable()
     {
-        spriteRenderer.color = Color.white;
+        if (spriteRenderer = GetComponent<SpriteRenderer>())
+        {
+            spriteRenderer.color = Color.white;
+        }
         if (healthComponent = GetComponent<HealthComponent>())
         {
             healthComponent.OnDeath += HandleDeath;
@@ -44,6 +84,11 @@ public class Enemy : GameplayMonoBehaviour
         if (enemyMovement = GetComponent<EnemyMovement>())
         {
             enemyMovement.RangeMovementSettings.OnExclusion += HandleRelease;
+            Debug.Log("enemyMovement = GetComponent<EnemyMovement>()");
+        }
+        else
+        {
+            Debug.LogWarning("enemyMovement = GetComponent<EnemyMovement>()");
         }
 
         _hasBeenReleased = false;
@@ -51,31 +96,19 @@ public class Enemy : GameplayMonoBehaviour
 
     void Start()
     {
-        visualsObject = new GameObject("EnemyVisuals");
-        visualsObject.transform.parent = this.transform;
-        visualsObject.transform.localPosition = Vector3.zero;
+        //spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        //Animator animator = gameObject.AddComponent<Animator>();
 
-        SpriteRenderer spriteRenderer = visualsObject.AddComponent<SpriteRenderer>();
-        Animator animator = visualsObject.AddComponent<Animator>();
-
-        if (enemyDataLoader = GetComponent<EnemyDataLoader>())
-        {
-            var enemyData = enemyDataLoader.GetEnemyData(_type);
-            spriteRenderer.sprite = GetEnemySprite(enemyData.spritePath);
-            animator.runtimeAnimatorController = GetEnemyAnimatorController(enemyData.animatorControllerPath);
-        }
-
-        spriteRenderer.sortingOrder = 1;
-    }
-
-    private Sprite GetEnemySprite(string spritePath)
-    {
-        return Resources.Load<Sprite>("Sprites/EnemySprite");
-    }
-
-    private RuntimeAnimatorController GetEnemyAnimatorController(string animatorControllerPath)
-    {
-        return Resources.Load<RuntimeAnimatorController>("Animators/EnemyAnimatorController");
+        //if (enemyDataLoader = GetComponent<EnemyDataLoader>())
+        //{
+        //    var enemyData = enemyDataLoader.GetEnemyData(_type);
+        //    spriteRenderer.sprite = enemyData.sprite;
+        //    spriteRenderer.sortingOrder = 1;
+        //    animator.runtimeAnimatorController = enemyData.animatorController;
+        //}
+        //enemyMovement = gameObject.AddComponent<EnemyMovement>();
+        //healthComponent = gameObject.AddComponent<HealthComponent>();
+        //EnemyDodge enemyDodge = gameObject.AddComponent<EnemyDodge>();
     }
 
     protected override void UnPausableUpdate() 
@@ -111,7 +144,7 @@ public class Enemy : GameplayMonoBehaviour
 
             if (other.TryGetComponent<HealthComponent>(out HealthComponent playerHealth))
             {
-                playerHealth.TakeDamage(damage);
+                playerHealth.TakeDamage(_damage);
             }
         }
     }
@@ -142,11 +175,15 @@ public class Enemy : GameplayMonoBehaviour
     protected void HandleDamage(float receivedDamage)
     {
         //Debug.Log("HandleDamage");
-        StartCoroutine(Flash());
-        if (bloodEffect != null)
+        if(spriteRenderer != null)
         {
-            bloodSpawnEffect = Instantiate(bloodEffect, transform.position, Quaternion.identity);
+            StartCoroutine(Flash());
+            if (_bloodEffect != null)
+            {
+                bloodSpawnEffect = Instantiate(_bloodEffect, transform.position, Quaternion.identity);
+            }
         }
+        
         // receivedDamage - UI ?
     }
 
@@ -184,11 +221,6 @@ public class Enemy : GameplayMonoBehaviour
     public void SetPool(ObjectPool<Enemy> pool)
     {
         _pool = pool;
-    }
-
-    public EEnemyType GetTypeEnemy()
-    {
-        return _type;
     }
 
     protected virtual void Unsubcribe()

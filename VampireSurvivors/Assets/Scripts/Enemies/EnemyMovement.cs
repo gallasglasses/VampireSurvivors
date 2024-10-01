@@ -29,16 +29,32 @@ public enum EActionType
 [System.Serializable]
 public class CommonMovementSettings
 {
-    [FormerlySerializedAs("MoveSpeed")]
     [SerializeField] private float _moveSpeed = 0.3f;
     [SerializeField] private float _speedMultiplier = 4f;
     [SerializeField] private float _accelerationTime = 2.5f;
-    [FormerlySerializedAs("MoveType")]
     [SerializeField] private EMovementType _moveType;
     [SerializeField] private EMovementType _followType;
     [SerializeField] private EActionType _actionType;
+    [SerializeField] private Animator _animator;
     private float _angle = 0f;
-    
+    public void Initialize(
+        float MoveSpeed,
+        float SpeedMultiplier,
+        float AccelerationTime,
+        EMovementType MoveType,
+        EMovementType FollowType,
+        EActionType ActionType,
+        Animator Animator)
+    {
+        this.MoveSpeed = MoveSpeed;
+        this.SpeedMultiplier = SpeedMultiplier;
+        this.AccelerationTime = AccelerationTime;
+        this.MoveType = MoveType;
+        this.FollowType = FollowType;
+        this.ActionType = ActionType;
+        this.Animator = Animator;
+    }
+
     public float MoveSpeed
     {
         get => _moveSpeed;
@@ -54,7 +70,6 @@ public class CommonMovementSettings
         get => _accelerationTime;
         set => _accelerationTime = value;
     }
-
     public EMovementType MoveType
     {
         get => _moveType;
@@ -69,6 +84,11 @@ public class CommonMovementSettings
     {
         get => _actionType;
         set => _actionType = value;
+    }
+    public Animator Animator
+    {
+        get => _animator;
+        set => _animator = value;
     }
     public float Angle
     {
@@ -86,6 +106,17 @@ public class RangeMovementSettings
     [SerializeField] private float _minTimeBeforeExclusion = 3f;
     private bool _canCheckDistance = false;
     public event Action OnExclusion;
+    public void Initialize(
+        float MinDistance,
+        float DetectionRange,
+        float ExclusionRange,
+        float MinTimeBeforeExclusion)
+    {
+        this.MinDistance = MinDistance;
+        this.DetectionRange = DetectionRange;
+        this.ExclusionRange = ExclusionRange;
+        this.MinTimeBeforeExclusion = MinTimeBeforeExclusion;
+    }
 
     public float MinDistance
     {
@@ -122,8 +153,15 @@ public class RangeMovementSettings
 [System.Serializable]
 public class SpiralMovementSettings
 {
-    public Vector2 _spiralTightnessRange;
-    public float _spiralRadiusIncreaseTime;
+    [SerializeField] private Vector2 _spiralTightnessRange;
+    [SerializeField] private float _spiralRadiusIncreaseTime;
+    public void Initialize(
+        Vector2 SpiralTightnessRange,
+        float SpiralRadiusIncreaseTime)
+    {
+        this.SpiralTightnessRange = SpiralTightnessRange;
+        this.SpiralRadiusIncreaseTime = SpiralRadiusIncreaseTime;
+    }
 
     public Vector2 SpiralTightnessRange
     {
@@ -145,7 +183,15 @@ public class WaveMovementSettings
     [SerializeField] private float _angleRange;
     private Vector2 _perpendicularDirection = Vector2.zero;
     private Vector2 _deviatedDirection;
-
+    public void Initialize(
+        Vector2 WaveAmplitudeRange,
+        float WaveFrequency,
+        float AngleRange)
+    {
+        this.WaveAmplitudeRange = WaveAmplitudeRange;
+        this.WaveFrequency = WaveFrequency;
+        this.AngleRange = AngleRange;
+    }
     public Vector2 WaveAmplitudeRange
     {
         get => _waveAmplitudeRange;
@@ -176,7 +222,12 @@ public class WaveMovementSettings
 [System.Serializable]
 public class CircleMovementSettings
 {
-    [SerializeField] private float _circleRadius;
+    [SerializeField] private float _circleRadius; 
+    public void Initialize(
+        float CircleRadius)
+    {
+        this.CircleRadius = CircleRadius;
+    }
     public float CircleRadius
     {
         get => _circleRadius;
@@ -194,7 +245,13 @@ public class DashActionSettings
     private bool _isDashing = false;
     private float _dashTimer;
     private float _dashTime;
-
+    public void Initialize(
+        float DashInterval,
+        float DashDuration)
+    {
+        this.DashInterval = DashInterval;
+        this.DashDuration = DashDuration;
+    }
     public float DashInterval
     {
         get => _dashInterval;
@@ -234,13 +291,16 @@ public class DashActionSettings
 
 public class EnemyMovement : GameplayMonoBehaviour
 {
-    protected Transform playerTransform;
+    private Transform playerTransform;
     private Movement playerMovement;
-    public Animator animator;
 
     [Header("Common Movement Settings")]
     [SerializeField]
     private CommonMovementSettings commonMovementSettings = new CommonMovementSettings();
+    public CommonMovementSettings CommonMovementSettings
+    {
+        get { return commonMovementSettings; }
+    }
 
     [Header("Range Movement Settings")]
     [SerializeField]
@@ -253,18 +313,34 @@ public class EnemyMovement : GameplayMonoBehaviour
     [Header("Wave Movement Settings")]
     [SerializeField]
     private WaveMovementSettings waveMovementSettings = new WaveMovementSettings();
+    public WaveMovementSettings WaveMovementSettings
+    {
+        get { return waveMovementSettings; }
+    }
 
     [Header("Dash Movement Settings")]
     [SerializeField]
     private DashActionSettings dashActionSettings = new DashActionSettings();
+    public DashActionSettings DashActionSettings
+    {
+        get { return dashActionSettings; }
+    }
 
     [Header("Spiral Movement Settings")]
     [SerializeField]
     private SpiralMovementSettings spiralMovementSettings = new SpiralMovementSettings();
+    public SpiralMovementSettings SpiralMovementSettings
+    {
+        get { return spiralMovementSettings; }
+    }
 
     [Header("Circle Movement Settings")]
     [SerializeField]
     private CircleMovementSettings circleMovementSettings = new CircleMovementSettings();
+    public CircleMovementSettings CircleMovementSettings
+    {
+        get { return circleMovementSettings; }
+    }
 
     protected Vector2 playerMovementVector;
     protected Vector2 directionToPlayer;
@@ -281,11 +357,11 @@ public class EnemyMovement : GameplayMonoBehaviour
     private bool isDodging = false;
     private bool isInMovingMode = false;
     private bool isInFollowingMode = true;
+    
 
     protected override void Awake()
     {
         base.Awake();
-        playerTransform = GameManager.Instance.player.GetComponent<Transform>();
         isInFollowingMode = true;
         isInMovingMode = false;
         waveMovementSettings.PerpendicularDirection = Vector2.zero;
@@ -293,13 +369,16 @@ public class EnemyMovement : GameplayMonoBehaviour
         rangeMovementSettings.CanCheckDistance = false;
         currentSpeed = commonMovementSettings.MoveSpeed;
         commonMovementSettings.Angle = 0f;
-        distanceToPlayer = 0f;
+        distanceToPlayer = 0f; 
+        
     }
 
     void OnEnable()
     {
-        Invoke("EnableDistanceCheck", rangeMovementSettings.MinTimeBeforeExclusion);
-        initialDistanceToPlayer = GetDistanceToPlayer();
+        if(playerTransform != null)
+        {
+            initialDistanceToPlayer = GetDistanceToPlayer();
+        }
     }
 
     void Start()
@@ -310,24 +389,39 @@ public class EnemyMovement : GameplayMonoBehaviour
             playerMovement.OnMovementChanged -= HandlePlayerMovementChanged;
             playerMovement.OnMovementChanged += HandlePlayerMovementChanged;
         }
-        originalAnimationSpeed = animator.speed;
+        originalAnimationSpeed = commonMovementSettings.Animator.speed;
+        Invoke("EnableDistanceCheck", rangeMovementSettings.MinTimeBeforeExclusion);
+
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager.Instance is null!");
+        }
+        else if (GameManager.Instance.player == null)
+        {
+            Debug.LogError("GameManager.Instance.player is null!");
+        }
+        if (GameManager.Instance != null)
+        {
+            playerTransform = GameManager.Instance.player.GetComponent<Transform>();
+            initialDistanceToPlayer = GetDistanceToPlayer();
+        }
     }
 
     protected override void PausableUpdate()
     {
         base.UnPausableUpdate();
-        if (animator != null)
+        if (commonMovementSettings.Animator != null)
         {
-            animator.speed = 0f;
+            commonMovementSettings.Animator.speed = 0f;
         }
     }
 
     protected override void UnPausableUpdate()
     {
         base.UnPausableUpdate();
-        if (animator != null)
+        if (commonMovementSettings.Animator != null)
         {
-            animator.speed = originalAnimationSpeed;
+            commonMovementSettings.Animator.speed = originalAnimationSpeed;
         }
         distanceToPlayer = GetDistanceToPlayer();
 

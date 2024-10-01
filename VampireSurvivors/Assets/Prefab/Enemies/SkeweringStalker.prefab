@@ -156,10 +156,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da4ca7db61af57d4c9d364bc15ea3a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _type: SkeweringStalker
   _typeXPGem: 1
-  _type: 1
-  damage: 5
+  _damage: 5
+  _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
 --- !u!114 &3850590918494927158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +194,7 @@ MonoBehaviour:
   dodgeDistance: 2
   dodgeDuration: 0.2
   detectionRadius: 1
-  enemyMovement: {fileID: 0}
+  enemyMovement: {fileID: 784810754436292556}
   projectileLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -210,26 +210,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7247234370762194e976f5030fef140c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
   commonMovementSettings:
-    _moveSpeed: 0.5
-    _speedMultiplier: 4
-    _accelerationTime: 2.5
+    _moveSpeed: 1.2
+    _speedMultiplier: 1.4
+    _accelerationTime: 0.5
     _moveType: 1
     _followType: 3
     _actionType: 0
+    _animator: {fileID: 7836862130010979482}
   rangeMovementSettings:
-    _minDistance: 0.1
-    _detectionRange: 2
-    _exclusionRange: 4
+    _minDistance: 2
+    _detectionRange: 6
+    _exclusionRange: 20
     _minTimeBeforeExclusion: 3
   waveMovementSettings:
-    _waveAmplitudeRange: {x: 0, y: 0}
-    _waveFrequency: 0
-    _angleRange: 0
+    _waveAmplitudeRange: {x: 1.5, y: 3.5}
+    _waveFrequency: 2
+    _angleRange: 16
   dashActionSettings:
-    _dashInterval: 1
-    _dashDuration: 5
+    _dashInterval: 3
+    _dashDuration: 0.2
   spiralMovementSettings:
     _spiralTightnessRange: {x: 0, y: 0}
     _spiralRadiusIncreaseTime: 0

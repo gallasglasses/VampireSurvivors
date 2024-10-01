@@ -16,7 +16,51 @@ public class EnemyDodge : GameplayMonoBehaviour
     private float currentDodgeTime = 0f;
     private float checkInterval = 0.2f;
     private float lastCheckTime = 0f;
-
+    public float DodgeSpeed
+    {
+        get => dodgeSpeed;
+        set => dodgeSpeed = value;
+    }
+    public float DodgeDistance
+    {
+        get => dodgeDistance;
+        set => dodgeDistance = value;
+    }
+    public float DodgeDuration
+    {
+        get => dodgeDuration;
+        set => dodgeDuration = value;
+    }
+    public float DetectionRadius
+    {
+        get => detectionRadius;
+        set => detectionRadius = value;
+    }
+    public EnemyMovement EnemyMovement
+    {
+        get => enemyMovement;
+        set => enemyMovement = value;
+    }
+    public LayerMask ProjectileLayer
+    {
+        get => projectileLayer;
+        set => projectileLayer = value;
+    }
+    public void Initialize(
+        float dodgeSpeed,
+        float dodgeDistance,
+        float dodgeDuration,
+        float detectionRadius,
+        EnemyMovement enemyMovement,
+        LayerMask projectileLayer)
+    {
+        this.dodgeSpeed = dodgeSpeed;
+        this.dodgeDistance = dodgeDistance;
+        this.dodgeDuration = dodgeDuration;
+        this.detectionRadius = detectionRadius;
+        this.enemyMovement = enemyMovement;
+        this.projectileLayer = projectileLayer;
+    }
 
     protected override void UnPausableUpdate()
     {

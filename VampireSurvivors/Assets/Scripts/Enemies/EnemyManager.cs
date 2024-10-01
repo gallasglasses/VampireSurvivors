@@ -6,12 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[System.Serializable]
-public class EnemyType
-{
-    public string typeName;
-}
-
 public class EnemyManager : GameplayMonoBehaviour
 {
     [Header("Wave Settings")]
@@ -25,9 +19,9 @@ public class EnemyManager : GameplayMonoBehaviour
     private bool isSpawningResiduals = false;
 
     [Header("Enemy Spawn Settings")]
-    [SerializeField] private List<EnemyType> enemyTypes = new List<EnemyType>();
-    [SerializeField] private MyDictionary<EEnemyType, Enemy> enemies;
-    public Dictionary<EEnemyType, Enemy> enemiesDict = new Dictionary<EEnemyType, Enemy>();
+    //[SerializeField] private List<EnemyType> enemyTypes = new List<EnemyType>();
+    [SerializeField] private MyDictionary<string, Enemy> enemies;
+    public Dictionary<string, Enemy> enemiesDict = new Dictionary<string, Enemy>();
 
     private EnemySpawner enemySpawner;
     [SerializeField] private Vector2 spawnArea;
@@ -53,6 +47,17 @@ public class EnemyManager : GameplayMonoBehaviour
     {
         base.Awake();
         enemiesDict = enemies.ToDictionary();
+        PrintEnemiesDict(enemiesDict);
+    }
+    public void PrintEnemiesDict(Dictionary<string, Enemy> enemiesDict)
+    {
+        foreach (var entry in enemiesDict)
+        {
+            string enemyType = entry.Key;
+            Enemy enemy = entry.Value;
+
+            Debug.Log($"EnemyType: {enemyType}, Enemy: {enemy.name}");
+        }
     }
 
     void Start()
@@ -143,18 +148,36 @@ public class EnemyManager : GameplayMonoBehaviour
             Debug.LogError("Enemy pool is not set.");
             return;
         }
+        List<string> enemyKeys = enemySpawner.pools.Keys.ToList();
+        foreach (string enemy in enemyKeys)
+        {
+            Debug.Log($"LIST enemy of type: {enemy}");
+        }
+        int enemyIndex = spawnedWaves % enemySpawner.pools.Count;
+        string selectedEnemyType = enemyKeys[enemyIndex];
 
         Enemy enemyToSpawn = null;
-        if (spawnedWaves % 2 == 0)
+        if (enemySpawner.pools.TryGetValue(selectedEnemyType, out var pool))
         {
-            enemyToSpawn = enemySpawner.pools.Values.ElementAt(1).Get();
-            //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(1));
+            // Spawn an enemy from the selected pool
+            enemyToSpawn = pool.Get();
+
+            Debug.Log($"Spawning enemy of type: {selectedEnemyType}");
         }
         else
         {
-            enemyToSpawn = enemySpawner.pools.Values.ElementAt(0).Get();
-            //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(0));
+            Debug.LogError($"EnemyType '{selectedEnemyType}' not found in pools.");
         }
+        //if (spawnedWaves % 2 == 0)
+        //{
+        //    enemyToSpawn = enemySpawner.pools.ElementAt(1).Value.Get();
+        //    //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(1));
+        //}
+        //else
+        //{
+        //    enemyToSpawn = enemySpawner.pools.ElementAt(0).Value.Get();
+        //    //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(0));
+        //}
 
         enemyToSpawn.transform.position = GetRandomSpawnPosition();
         enemyToSpawn.OnRelease -= HandleEnemyRelease;

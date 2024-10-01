@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEditor.Animations;
 
 public class EnemyDataLoader : MonoBehaviour
 {
@@ -12,13 +13,13 @@ public class EnemyDataLoader : MonoBehaviour
 
     public class EnemyData
     {
-        public string spritePath;
-        public string animatorControllerPath;
+        public Sprite sprite;
+        public AnimatorController animatorController;
 
-        public EnemyData(string spritePath, string animatorControllerPath)
+        public EnemyData(Sprite newSprite, AnimatorController newAnimatorController)
         {
-            this.spritePath = spritePath;
-            this.animatorControllerPath = animatorControllerPath;
+            this.sprite = newSprite;
+            this.animatorController = newAnimatorController;
         }
     }
 
@@ -40,13 +41,13 @@ public class EnemyDataLoader : MonoBehaviour
     //            {
     //                string[] values = lines[i].Split(',');
 
-    //                string spritePath = values[1];
+    //                string sprite = values[1];
     //                string animatorControllerPath = values[2];
     //                string ID = values[0];
     //                bool successID = Enum.TryParse<EEnemyType>(ID, out EEnemyType resultID);
     //                if (successID)
     //                {
-    //                    enemyDataDict[resultID] = new EnemyData(spritePath, animatorControllerPath);
+    //                    enemyDataDict[resultID] = new EnemyData(sprite, animatorControllerPath);
     //                }
     //            }
     //        }
