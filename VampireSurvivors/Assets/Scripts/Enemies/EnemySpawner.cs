@@ -8,10 +8,9 @@ using UnityEngine.Pool;
 
 public class EnemySpawner : MonoBehaviour
 {
-    //public ObjectPool<Enemy> _pool;
     private EnemyManager enemyManager;
     [SerializeField] private int _spawnCount = 50; 
-    public Dictionary<string, ObjectPool<Enemy>> pools = new Dictionary<string, ObjectPool<Enemy>>();
+    public Dictionary<string, ObjectPool<Enemy>> pools = new();
 
     private void Start()
     {

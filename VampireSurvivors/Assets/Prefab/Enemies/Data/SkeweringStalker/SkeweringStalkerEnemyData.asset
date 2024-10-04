@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef316bcbb816085418c1828b65f7fe2c, type: 3}
+  m_Name: SkeweringStalkerEnemyData
+  m_EditorClassIdentifier: 
+  enemyType: SkeweringStalker
+  enemySprite: {fileID: 7525820460358766162, guid: 56d849c0cb25bbf4db7311014b5739fc, type: 3}
+  enemyAnimatorController: {fileID: 8693599120282270143, guid: 56d849c0cb25bbf4db7311014b5739fc, type: 3}
+  maxHealth: 5
+  typeXPGem: 1
+  damage: 5
+  bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}

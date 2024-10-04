@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd0e2451a1723e43ad7a36a02383ae1, type: 3}
+  m_Name: NefariousScampEnemyMovementData
+  m_EditorClassIdentifier: 
+  moveSpeed: 1
+  speedMultiplier: 1.25
+  accelerationTime: 0.5
+  moveType: 1
+  followType: 0
+  actionType: 1
+  animator: {fileID: 0}
+  movementSettings: {fileID: 11400000, guid: e33195a24fd49d247af8cd9cc4dc4816, type: 2}
+  chasingSettings: {fileID: 11400000, guid: aed356cb6410b2544876c8cc640262dd, type: 2}
+  actionSettings: {fileID: 11400000, guid: 46ff54f7998fd1c4dbcda221122de003, type: 2}
+  rangeMovementSettingsData: {fileID: 11400000, guid: 1656b8490718b684b84dd4fa08487695, type: 2}

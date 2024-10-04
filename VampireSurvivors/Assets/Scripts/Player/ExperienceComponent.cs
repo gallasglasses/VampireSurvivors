@@ -82,7 +82,7 @@ public class ExperienceComponent : MonoBehaviour
 [Serializable]
 public class MyDictionary<TKey, TValue>
 {
-    [SerializeField] private _MyDictionary<TKey, TValue>[] dictionary;
+    [SerializeField] public _MyDictionary<TKey, TValue>[] dictionary;
 
     public Dictionary<TKey, TValue> ToDictionary()
     {

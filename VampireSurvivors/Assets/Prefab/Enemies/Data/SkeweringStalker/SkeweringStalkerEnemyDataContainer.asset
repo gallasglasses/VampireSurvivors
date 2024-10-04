@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c50d8cfaeb89e94e98c9f9002cd84ec, type: 3}
+  m_Name: SkeweringStalkerEnemyDataContainer
+  m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: f4309ef5569872246bae0ff6c35fa679, type: 2}
+  enemyMovementData: {fileID: 11400000, guid: d6d5fe8a1faf3d24ea0f056be8fd38f9, type: 2}
+  enemyDodgeData: {fileID: 11400000, guid: ea30ed42b2cc4994bb44dcc0b8aea3ae, type: 2}

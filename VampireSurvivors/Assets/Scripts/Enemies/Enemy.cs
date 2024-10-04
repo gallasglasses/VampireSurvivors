@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 using System;
-using static EnemyDataLoader;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 
@@ -20,7 +19,6 @@ public class Enemy : GameplayMonoBehaviour
     [SerializeField] private float _damage;
     [SerializeField] private ParticleSystem _bloodEffect;
 
-    private EnemyDataLoader enemyDataLoader; 
     private HealthComponent healthComponent;
     private EnemyMovement enemyMovement;
     private SpriteRenderer spriteRenderer;
@@ -64,6 +62,13 @@ public class Enemy : GameplayMonoBehaviour
         this.Damage = damage;
         this.BloodEffect = bloodEffect;
     }
+    public void Initialize(EnemyData data)
+    {
+        this.Type = data.enemyType;
+        this.TypeXPGem = data.typeXPGem;
+        this.Damage = data.damage;
+        this.BloodEffect = data.bloodEffect;
+    }
 
     public string GetTypeEnemy()
     {
@@ -90,25 +95,7 @@ public class Enemy : GameplayMonoBehaviour
         {
             Debug.LogWarning("enemyMovement = GetComponent<EnemyMovement>()");
         }
-
         _hasBeenReleased = false;
-    }
-
-    void Start()
-    {
-        //spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-        //Animator animator = gameObject.AddComponent<Animator>();
-
-        //if (enemyDataLoader = GetComponent<EnemyDataLoader>())
-        //{
-        //    var enemyData = enemyDataLoader.GetEnemyData(_type);
-        //    spriteRenderer.sprite = enemyData.sprite;
-        //    spriteRenderer.sortingOrder = 1;
-        //    animator.runtimeAnimatorController = enemyData.animatorController;
-        //}
-        //enemyMovement = gameObject.AddComponent<EnemyMovement>();
-        //healthComponent = gameObject.AddComponent<HealthComponent>();
-        //EnemyDodge enemyDodge = gameObject.AddComponent<EnemyDodge>();
     }
 
     protected override void UnPausableUpdate() 
@@ -154,7 +141,6 @@ public class Enemy : GameplayMonoBehaviour
         spriteRenderer.color = Color.red;
         float elapsedTime = 0f;
         float duration = 0.5f;
-
         while (elapsedTime < duration)
         {
             if (!Paused)
@@ -166,9 +152,7 @@ public class Enemy : GameplayMonoBehaviour
             {
                 yield return new WaitForSeconds(Time.deltaTime);
             }
-
         }
-
         spriteRenderer.color = Color.white;
     }
 
@@ -183,7 +167,6 @@ public class Enemy : GameplayMonoBehaviour
                 bloodSpawnEffect = Instantiate(_bloodEffect, transform.position, Quaternion.identity);
             }
         }
-        
         // receivedDamage - UI ?
     }
 

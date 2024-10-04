@@ -1192,12 +1192,12 @@ MonoBehaviour:
   waveDuration: 60
   maxWaves: 10
   intervalDuration: 10
-  enemies:
-    dictionary:
-    - _myKey: SkeweringStalker
-      _myValue: {fileID: 4934416091218842360, guid: 86f9dac26ad79584290b55e3b6a98501, type: 3}
-    - _myKey: HefariousScamp
-      _myValue: {fileID: 4016363180581210088, guid: ce9e9159bbffecb45a40ce2f98ebe754, type: 3}
+  enemyTypes:
+  - NefariousScamp
+  - SkeweringStalker
+  enemyPrefabs:
+  - {fileID: 6568099103090277922, guid: d4e74d0c142dde8459a730f3d2bea567, type: 3}
+  - {fileID: 4347713455681357526, guid: c6ffd3d904f1a0f45b5ac20b854917fa, type: 3}
   spawnArea: {x: 12, y: 10}
   totalEnemiesPerWave: 60
   maxEnemiesAlive: 300
@@ -1702,63 +1702,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1654695722}
   m_CullTransparentMesh: 1
---- !u!1001 &1783715742
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 425050353485533634, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_Name
-      value: FloatingEye 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -13.199382
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.23183925
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022221558793721042, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2e960b4da455e464d9d4b98e37828954, type: 3}
 --- !u!1 &1830207889
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,4 +2315,3 @@ SceneRoots:
   - {fileID: 581834836}
   - {fileID: 780563668}
   - {fileID: 842772253}
-  - {fileID: 1783715742}

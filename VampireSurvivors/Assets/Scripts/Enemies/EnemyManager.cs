@@ -19,9 +19,11 @@ public class EnemyManager : GameplayMonoBehaviour
     private bool isSpawningResiduals = false;
 
     [Header("Enemy Spawn Settings")]
-    //[SerializeField] private List<EnemyType> enemyTypes = new List<EnemyType>();
-    [SerializeField] private MyDictionary<string, Enemy> enemies;
-    public Dictionary<string, Enemy> enemiesDict = new Dictionary<string, Enemy>();
+    [SerializeField] private List<string> enemyTypes = new List<string>();
+    [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
+
+    //[SerializeField] private MyDictionary<string, Enemy> enemies;
+    public Dictionary<string, Enemy> enemiesDict = new();
 
     private EnemySpawner enemySpawner;
     [SerializeField] private Vector2 spawnArea;
@@ -46,17 +48,16 @@ public class EnemyManager : GameplayMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
-        enemiesDict = enemies.ToDictionary();
-        PrintEnemiesDict(enemiesDict);
+        UpdateEnemiesDictionary();
     }
-    public void PrintEnemiesDict(Dictionary<string, Enemy> enemiesDict)
+    public void PrintEnemiesDict(Dictionary<string, Enemy> enemies)
     {
-        foreach (var entry in enemiesDict)
+        foreach (var p in enemies)
         {
-            string enemyType = entry.Key;
-            Enemy enemy = entry.Value;
+            string enemyType = p.Key;
+            var enemy = p.Value;
 
-            Debug.Log($"EnemyType: {enemyType}, Enemy: {enemy.name}");
+            Debug.Log($"EnemyType: {enemyType}, Enemy: {enemy}");
         }
     }
 
@@ -145,39 +146,23 @@ public class EnemyManager : GameplayMonoBehaviour
     {
         if (enemySpawner == null)
         {
-            Debug.LogError("Enemy pool is not set.");
+            //Debug.LogError("Enemy pool is not set.");
             return;
         }
         List<string> enemyKeys = enemySpawner.pools.Keys.ToList();
-        foreach (string enemy in enemyKeys)
-        {
-            Debug.Log($"LIST enemy of type: {enemy}");
-        }
         int enemyIndex = spawnedWaves % enemySpawner.pools.Count;
         string selectedEnemyType = enemyKeys[enemyIndex];
 
         Enemy enemyToSpawn = null;
         if (enemySpawner.pools.TryGetValue(selectedEnemyType, out var pool))
         {
-            // Spawn an enemy from the selected pool
             enemyToSpawn = pool.Get();
-
-            Debug.Log($"Spawning enemy of type: {selectedEnemyType}");
+            //Debug.Log($"Spawning enemy of type: {selectedEnemyType}");
         }
         else
         {
-            Debug.LogError($"EnemyType '{selectedEnemyType}' not found in pools.");
+            //Debug.LogError($"EnemyType '{selectedEnemyType}' not found in pools.");
         }
-        //if (spawnedWaves % 2 == 0)
-        //{
-        //    enemyToSpawn = enemySpawner.pools.ElementAt(1).Value.Get();
-        //    //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(1));
-        //}
-        //else
-        //{
-        //    enemyToSpawn = enemySpawner.pools.ElementAt(0).Value.Get();
-        //    //Debug.Log("Enemy in pool: " + enemySpawner.pools.Keys.ElementAt(0));
-        //}
 
         enemyToSpawn.transform.position = GetRandomSpawnPosition();
         enemyToSpawn.OnRelease -= HandleEnemyRelease;
@@ -291,5 +276,29 @@ public class EnemyManager : GameplayMonoBehaviour
     void HandlePlayerMovementChanged(Vector2 movementVector)
     {
         playerMovementVector = movementVector;
+    }
+    public void AddEnemyToDictionary(string key, Enemy enemy)
+    {
+        if (!enemiesDict.ContainsKey(key) && !enemyTypes.Contains(key))
+        {
+            enemiesDict.Add(key, enemy);
+            enemyTypes.Add(key);
+            enemyPrefabs.Add(enemy);
+            Debug.Log($"Enemy {key} is added.");
+        }
+        else
+        {
+            Debug.Log($"Enemy {key} already exist.");
+        }
+    }
+
+    public void UpdateEnemiesDictionary()
+    {
+        enemiesDict = new Dictionary<string, Enemy>();
+
+        for(int i = 0; i < enemyTypes.Count; i++ )
+        {
+            enemiesDict[enemyTypes[i]] = enemyPrefabs[i];
+        }
     }
 }
