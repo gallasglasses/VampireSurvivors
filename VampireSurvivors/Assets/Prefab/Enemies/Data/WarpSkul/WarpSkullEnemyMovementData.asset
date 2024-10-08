@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd0e2451a1723e43ad7a36a02383ae1, type: 3}
+  m_Name: WarpSkullEnemyMovementData
+  m_EditorClassIdentifier: 
+  moveSpeed: 0.5
+  speedMultiplier: 1.2
+  accelerationTime: 0.5
+  moveType: 1
+  followType: 1
+  actionType: 0
+  animator: {fileID: 0}
+  movementSettings: {fileID: 11400000, guid: 82e24ed5cc8c1a04fa5c2bb872b7051c, type: 2}
+  chasingSettings: {fileID: 11400000, guid: 75c8c0acc3e7e5b4ba5d4c28c46421d7, type: 2}
+  actionSettings: {fileID: 11400000, guid: ed9fdc19ac4d2fa44ac857a5b9cd2f5f, type: 2}
+  rangeMovementSettingsData: {fileID: 11400000, guid: 05bc9b41f670fe941b3fddadab9451f5, type: 2}

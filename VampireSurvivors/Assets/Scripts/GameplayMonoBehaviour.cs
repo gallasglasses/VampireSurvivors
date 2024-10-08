@@ -7,8 +7,10 @@ using UnityEngine;
 public abstract class GameplayMonoBehaviour : MonoBehaviour
 {
     private static bool isPaused;
+    private static bool isGameOver;
     protected float originalAnimationSpeed;
     public static bool Paused { get { return isPaused; } set { isPaused = value; } }
+    public static bool FinishedGame { get { return isGameOver; } set { isGameOver = value; } }
 
     private float pauseStartTime;
     private float pauseDuration = 0f;
@@ -50,6 +52,7 @@ public abstract class GameplayMonoBehaviour : MonoBehaviour
     protected virtual void PausableUpdate() { }
 
     protected virtual void PausableFixedUpdate() { }
+    protected virtual void FinishableUpdate() { }
 
     protected void OnMatchStateChanged(EMatchState state)
     {
@@ -62,7 +65,7 @@ public abstract class GameplayMonoBehaviour : MonoBehaviour
                 UnPause();
                 break;
             case EMatchState.GameOver:
-                Pause();
+                GameOver();
                 break;
             case EMatchState.WaitingToStart:
                 break;
@@ -80,11 +83,31 @@ public abstract class GameplayMonoBehaviour : MonoBehaviour
         pauseStartTime = Time.time;
     }
 
+    private void GameOver()
+    {
+        isPaused = true;
+        isGameOver = true;
+
+        if (isGameOver)
+        {
+            FinishableUpdate();
+        }
+    }
+
     private void UnPause()
     {
-        isPaused = false;
-        float currentTime = Time.time;
-        pauseDuration += currentTime - pauseStartTime;
+        if (isGameOver)
+        {
+            isGameOver = !isGameOver;
+            isPaused = false;
+            pauseDuration = 0;
+        }
+        else
+        {
+            isPaused = false;
+            float currentTime = Time.time;
+            pauseDuration += currentTime - pauseStartTime;
+        }
     }
 
     protected void ResetDuration()

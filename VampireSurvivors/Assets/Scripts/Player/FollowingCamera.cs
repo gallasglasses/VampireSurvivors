@@ -10,11 +10,11 @@ public class FollowingCamera : MonoBehaviour
 
     void Start()
     {
-        camOffset = transform.position - target.position;
+        camOffset = transform.position - Player.Instance.transform.position;
     }
 
     private void FixedUpdate()
     {
-        transform.position = target.position + camOffset;
+        transform.position = Player.Instance.transform.position + camOffset;
     }
 }

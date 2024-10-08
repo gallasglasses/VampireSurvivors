@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c50d8cfaeb89e94e98c9f9002cd84ec, type: 3}
+  m_Name: WarpSkullEnemyDataContainer
+  m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: 15ebed17dffe64940a82975588154d45, type: 2}
+  enemyMovementData: {fileID: 11400000, guid: 6a2952218b1904042b573325c3f66340, type: 2}
+  enemyDodgeData: {fileID: 11400000, guid: 6b3bb4ac2dfe621459544dc570611476, type: 2}

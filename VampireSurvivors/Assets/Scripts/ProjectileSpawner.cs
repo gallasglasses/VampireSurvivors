@@ -2,18 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
 
 
 public class ProjectileSpawner : MonoBehaviour
 {
     public ObjectPool<Projectile> _pool;
+    private List<Projectile> activeProjectiles = new List<Projectile>();
     private WeaponComponent weaponComponent;
+    private bool isReturningActiveObjectsToPool = false;
+
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        isReturningActiveObjectsToPool = false;
+        CreatePool();
+    }
+
+    public void ReturnActiveObjectsToPool()
+    {
+        if(activeProjectiles != null && activeProjectiles.Count > 0)
+        {
+            isReturningActiveObjectsToPool = true;
+            for (int i = activeProjectiles.Count - 1; i >= 0; i--)
+            {
+                if (activeProjectiles[i] != null && activeProjectiles[i].gameObject.activeSelf)
+                {
+                    Debug.Log($"activeProjectiles {activeProjectiles[i]}");
+                    _pool.Release(activeProjectiles[i]);
+                }
+                else
+                {
+                    activeProjectiles.RemoveAt(i);
+                }
+            }
+            activeProjectiles.Clear();
+        }
+    }
 
     private void Start()
     {
+        //CreatePool();
+    }
+
+    private void CreatePool()
+    {
         weaponComponent = GetComponent<WeaponComponent>();
         _pool = new ObjectPool<Projectile>(CreateProjectile, OnTakeProjectileFromPool, OnReturnProjectileToPool, OnDestroyProjectile, true, 100, 200);
-
     }
 
     private Projectile CreateProjectile()
@@ -29,21 +68,30 @@ public class ProjectileSpawner : MonoBehaviour
 
     private void OnTakeProjectileFromPool(Projectile projectile)
     {
-        //projectile.transform.position = weaponComponent.projectileTransform.position;
-        //projectile.transform.rotation = weaponComponent.projectileRotation;
-        //projectile.SetDirection(weaponComponent.GetDirection());
-        //projectile.SetVelocity();
-
         projectile.gameObject.SetActive(true);
+        activeProjectiles.Add(projectile);
     }
 
     private void OnReturnProjectileToPool(Projectile projectile)
     {
         projectile.gameObject.SetActive(false);
+        if(activeProjectiles.Contains(projectile))
+        {
+            activeProjectiles.Remove(projectile);
+            if (isReturningActiveObjectsToPool)
+            {
+                Destroy(projectile.gameObject);
+            }
+        }
     }
 
     private void OnDestroyProjectile(Projectile projectile)
     {
         Destroy(projectile.gameObject);
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

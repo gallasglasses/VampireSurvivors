@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class ExperienceComponent : MonoBehaviour
@@ -19,12 +20,27 @@ public class ExperienceComponent : MonoBehaviour
     [SerializeField] private MyDictionary<TypeXPGem, int> experienceDictionary;
     private Dictionary<TypeXPGem, int> xpDictionary = new Dictionary<TypeXPGem, int>();
 
-
-    private void Start()
+    private void Awake()
     {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        currentXP = 0;
+        currentLvl = 0;
+        maxLvlXP = 5;
+        deltaUpdateLvlXP = 10;
+
         xpDictionary = experienceDictionary.ToDictionary();
         SetXP(currentXP);
     }
+
+    //private void Start()
+    //{
+    //    xpDictionary = experienceDictionary.ToDictionary();
+    //    SetXP(currentXP);
+    //}
 
     public void TryToAddXP(TypeXPGem newXPType)
     {

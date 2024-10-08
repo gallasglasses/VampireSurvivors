@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
 
 public class WeaponComponent : GameplayMonoBehaviour
 {
@@ -28,14 +29,49 @@ public class WeaponComponent : GameplayMonoBehaviour
     [SerializeField] private float spawnRadius = 5f;
     private PlayerController playerController;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
     void Start()
     {
         if (GameManager.Instance.player.TryGetComponent<PlayerController>(out PlayerController playerController))
         {
             playerController.OnAttack += HandleAttack;
         }
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        projectileSpawner = GetComponent<ProjectileSpawner>();
+        if (projectileSpawner == null)
+            projectileSpawner = GetComponent<ProjectileSpawner>();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (mainCamera == null)
+        {
+            mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            if (mainCamera == null)
+            {
+                Debug.LogError("mainCamera not found!");
+            }
+        }
+        isGarlicTurnOn = false;
+        projectileCount = 1; 
+        powerUpStep = 1f;
+        increasingMultiplier = 0.5f;
+        if (projectileSpawner == null)
+        {
+            projectileSpawner = GetComponent<ProjectileSpawner>();
+        }
+    }
+
+    protected override void FinishableUpdate()
+    {
+        base.FinishableUpdate();
+        if (projectileSpawner != null)
+        {
+            projectileSpawner.ReturnActiveObjectsToPool();
+        }
     }
 
     protected override void UnPausableUpdate()
@@ -114,12 +150,13 @@ public class WeaponComponent : GameplayMonoBehaviour
         StartShooting();
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (playerController != null)
         {
             playerController.OnAttack -= HandleAttack;
         }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     public void PowerUpDamage()

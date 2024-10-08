@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,11 +22,18 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetMatchState(EMatchState.InProgress);
+        uiManager.OnUIStateChanged += SetUIState;
     }
 
     private void Start()
@@ -40,6 +48,15 @@ public class GameManager : MonoBehaviour
         {
             SetMatchState(EMatchState.Pause);
             Debug.Log($"EMatchState {EMatchState.Pause}");
+        }
+    }
+
+    public void GameOver()
+    {
+        if (matchState != EMatchState.GameOver)
+        {
+            SetMatchState(EMatchState.GameOver);
+            Debug.Log($"EMatchState {EMatchState.GameOver}");
         }
     }
 
@@ -70,6 +87,12 @@ public class GameManager : MonoBehaviour
         {
             SetMatchState(EMatchState.InProgress);
         }
+    }
+
+    private void OnDisable()
+    {
+        uiManager.OnUIStateChanged -= SetUIState;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
 

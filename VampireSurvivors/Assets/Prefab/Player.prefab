@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 8113176964063451213}
   - component: {fileID: 9092041497860251884}
   - component: {fileID: 6706024236399238748}
-  - component: {fileID: 4924719187656397605}
+  - component: {fileID: 8654900402914838706}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBarFill: {fileID: 0}
-  levelBarFill: {fileID: 0}
+  levelBarSlider: {fileID: 0}
   levelText: {fileID: 0}
 --- !u!114 &8113176964063451213
 MonoBehaviour:
@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50c40b6869684eb4d9b22363a49b07a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 0}
 --- !u!114 &6706024236399238748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +330,7 @@ MonoBehaviour:
       _myValue: 9
     - _myKey: 2
       _myValue: 29
---- !u!114 &4924719187656397605
+--- !u!114 &8654900402914838706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,7 +339,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4001056996946822881}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f55b98b5b3f6ec644b0e4768c9e4ae2a, type: 3}
+  m_Script: {fileID: 11500000, guid: 15693cb1c7221874589795f46255e55c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
@@ -372,13 +373,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4305780954931308770}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.1331, y: -0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4452945917791124100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5249186893026000875
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -458,7 +459,7 @@ Transform:
   m_GameObject: {fileID: 4702570016075101637}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -480,12 +481,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileRotation: {x: 0, y: 0, z: 0, w: 0}
   projectile: {fileID: 8710320181713099660, guid: 28dce26d86cb32147adbdec880264406, type: 3}
-  garlicAura: {fileID: 1546583419951579684, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
+  garlicAura: {fileID: 2230489560374794616}
   projectileTransform: {fileID: 4923588755271200400}
-  timeBetweenFire: 0.2
-  delay: 0.1
+  timeBetweenFire: 0.4
   powerUpStep: 1
   increasingMultiplier: 0.5
+  spawnRadius: 1
 --- !u!114 &7548285001476587953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,17 +613,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4452945917791124100}
     m_Modifications:
+    - target: {fileID: 1546583419951579684, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
+      propertyPath: damage
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4348090569857632766, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
       propertyPath: m_Name
       value: GarlicAura
       objectReference: {fileID: 0}
     - target: {fileID: 6215952944222376477, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.2640442
+      value: -0.026
       objectReference: {fileID: 0}
     - target: {fileID: 6215952944222376477, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6810878
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 6215952944222376477, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -661,6 +666,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
+--- !u!114 &2230489560374794616 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1546583419951579684, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}
+  m_PrefabInstance: {fileID: 829466199541832540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d73bcb3c44a2ae040a00edeb7c09c7d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6755781357265832257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6215952944222376477, guid: c3fb396ea7444d241831c7c15d2d539e, type: 3}

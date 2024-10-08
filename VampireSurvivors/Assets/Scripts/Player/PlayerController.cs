@@ -20,11 +20,14 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        //DontDestroyOnLoad(gameObject);
         playerInput = new PlayerInput();
     }
 
     private void OnEnable()
     {
+        playerInput.Enable();
+
         move = playerInput.Player.Move;
         move.Enable();
 
@@ -41,7 +44,15 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         move.Disable();
+
+        fire.performed -= Fire;
+        fire.canceled -= Fire;
         fire.Disable();
+
+        pause.performed -= Pause;
+        pause.Disable();
+
+        playerInput.Disable();
     }
 
     void Start()
@@ -95,7 +106,7 @@ public class PlayerController : MonoBehaviour
 
     public void HandleDeath() // rewrite! bad code
     {
-        GameManager.Instance.Pause();
+        GameManager.Instance.GameOver();
         uiManager.ToggleDeadMenu();
     }
 }

@@ -32,6 +32,8 @@ public class EnemyCreatorWindow : EditorWindow
     string assetPath = "Assets/Prefab/Enemies/Data/";
     private Vector2 _scrollPosition;
 
+    bool _isCreatingEnemyFailed = false;
+
     [MenuItem("Tools/Enemy Creator")]
     public static void ShowWindow()
     {
@@ -94,7 +96,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.movementSettings is not SpiralMovementSettingsData)
                                 {
                                     ScriptableObject newMovementSettings = ScriptableObject.CreateInstance<SpiralMovementSettingsData>();
-                                    CreateOrUpdateAsset(newMovementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
+                                    CreateOrUpdateAsset(newMovementSettings, enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.movementSettings = newMovementSettings;
                                 }
                                 break;
@@ -102,7 +104,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.movementSettings is not WaveMovementSettingsData)
                                 {
                                     ScriptableObject newMovementSettings = ScriptableObject.CreateInstance<WaveMovementSettingsData>();
-                                    CreateOrUpdateAsset(newMovementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
+                                    CreateOrUpdateAsset(newMovementSettings, enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.movementSettings = newMovementSettings;
                                 }
                                 break;
@@ -110,7 +112,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.movementSettings is not CircleMovementSettingsData)
                                 {
                                     ScriptableObject newMovementSettings = ScriptableObject.CreateInstance<CircleMovementSettingsData>();
-                                    CreateOrUpdateAsset(newMovementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
+                                    CreateOrUpdateAsset(newMovementSettings, enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.movementSettings = newMovementSettings;
                                 }
                                 break;
@@ -118,7 +120,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.movementSettings is not StraightMovementSettingsData)
                                 {
                                     ScriptableObject newMovementSettings = ScriptableObject.CreateInstance<StraightMovementSettingsData>();
-                                    CreateOrUpdateAsset(newMovementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
+                                    CreateOrUpdateAsset(newMovementSettings, enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.movementSettings = newMovementSettings;
                                 }
                                 break;
@@ -127,7 +129,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 break;
                         }
 
-                        scriptableObjectPaths.Add(enemyDataContainer.enemyMovementData.movementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
+                        //scriptableObjectPaths.Add(enemyDataContainer.enemyMovementData.movementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
                         if (previousMovementSettingsSO != null)
                         {
                             DeleteAssetOnPath(previousMovementSettingsSO);
@@ -159,7 +161,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.chasingSettings is not SpiralChasingSettingsData)
                                 {
                                     ScriptableObject newChasingSettings = ScriptableObject.CreateInstance<SpiralChasingSettingsData>();
-                                    CreateOrUpdateAsset(newChasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
+                                    CreateOrUpdateAsset(newChasingSettings, enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.chasingSettings = newChasingSettings;
                                 }
                                 break;
@@ -167,7 +169,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.chasingSettings is not WaveChasingSettingsData)
                                 {
                                     ScriptableObject newChasingSettings = ScriptableObject.CreateInstance<WaveChasingSettingsData>();
-                                    CreateOrUpdateAsset(newChasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
+                                    CreateOrUpdateAsset(newChasingSettings, enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.chasingSettings = newChasingSettings;
                                 }
                                 break;
@@ -175,7 +177,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.chasingSettings is not CircleChasingSettingsData)
                                 {
                                     ScriptableObject newChasingSettings = ScriptableObject.CreateInstance<CircleChasingSettingsData>();
-                                    CreateOrUpdateAsset(newChasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
+                                    CreateOrUpdateAsset(newChasingSettings, enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.chasingSettings = newChasingSettings;
                                 }
                                 break;
@@ -183,7 +185,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.chasingSettings is not StraightChasingSettingsData)
                                 {
                                     ScriptableObject newChasingSettings = ScriptableObject.CreateInstance<StraightChasingSettingsData>();
-                                    CreateOrUpdateAsset(newChasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
+                                    CreateOrUpdateAsset(newChasingSettings, enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.chasingSettings = newChasingSettings;
                                 }
                                 break;
@@ -191,7 +193,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 EditorGUILayout.HelpBox("Select a follow type to view settings", MessageType.Warning);
                                 break;
                         }
-                        scriptableObjectPaths.Add(enemyDataContainer.enemyMovementData.chasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
+                        //scriptableObjectPaths.Add(enemyDataContainer.enemyMovementData.chasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
                         if (previousChasingSettingsSO != null)
                         {
                             DeleteAssetOnPath(previousChasingSettingsSO);
@@ -221,7 +223,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.actionSettings is not DashActionSettingsData)
                                 {
                                     ScriptableObject newActionSettings = ScriptableObject.CreateInstance<DashActionSettingsData>();
-                                    CreateOrUpdateAsset(newActionSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
+                                    CreateOrUpdateAsset(newActionSettings, enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.actionSettings = newActionSettings;
                                 }
                                 break;
@@ -229,7 +231,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 if (enemyDataContainer.enemyMovementData.actionSettings is not CircleActionSettingsData)
                                 {
                                     ScriptableObject newActionSettings = ScriptableObject.CreateInstance<CircleActionSettingsData>();
-                                    CreateOrUpdateAsset(newActionSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
+                                    CreateOrUpdateAsset(newActionSettings, enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
                                     enemyDataContainer.enemyMovementData.actionSettings = newActionSettings;
 
                                     //DeleteAssetOnPath(previousActionSettingsSO);
@@ -241,7 +243,7 @@ public class EnemyCreatorWindow : EditorWindow
                                 EditorGUILayout.HelpBox("Select a action type to view settings", MessageType.Warning);
                                 break;
                         }
-                        scriptableObjectPaths.Add(enemyDataContainer.enemyMovementData.actionSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
+                        //scriptableObjectPaths.Add(enemyDataContainer.enemyMovementData.actionSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
                         if (previousActionSettingsSO != null)
                         {
                             DeleteAssetOnPath(previousActionSettingsSO);
@@ -263,14 +265,6 @@ public class EnemyCreatorWindow : EditorWindow
             else
             {
                 EditorGUILayout.HelpBox("Enemy Movement Data is null", MessageType.Warning);
-            }
-
-            foreach (var p in scriptableObjectPaths)
-            {
-                var key = p.Key;
-                var value = p.Value;
-
-                Debug.Log($"ScriptableObject: {key}, Path: {value}");
             }
 
             EditorGUILayout.LabelField("Movement Settings", EditorStyles.boldLabel);
@@ -300,9 +294,13 @@ public class EnemyCreatorWindow : EditorWindow
 
             if (GUILayout.Button("Create Enemy"))
             {
-                CreateEnemy();
+                _isCreatingEnemyFailed = CreateEnemy();
             }
 
+            if (!_isCreatingEnemyFailed)
+            {
+                EditorGUILayout.HelpBox("Enter Enemy Type", MessageType.Warning);
+            }
         }
         GUILayout.EndScrollView();
 
@@ -338,44 +336,68 @@ public class EnemyCreatorWindow : EditorWindow
 
     private void SaveContainer()
     {
-        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.rangeMovementSettingsData, assetPath + enemyDataContainer.enemyData.enemyType + "RangeMovementSettingsData.asset");
-        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.actionSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
-        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.chasingSettings, assetPath + enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
-        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.movementSettings, assetPath + enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
-        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData, assetPath + enemyDataContainer.enemyData.enemyType + "EnemyMovementData.asset");
-        CreateOrUpdateAsset(enemyDataContainer.enemyDodgeData, assetPath + enemyDataContainer.enemyData.enemyType + "EnemyDodgeData.asset");
-        CreateOrUpdateAsset(enemyDataContainer.enemyData, assetPath + enemyDataContainer.enemyData.enemyType + "EnemyData.asset");
-        CreateOrUpdateAsset(enemyDataContainer, assetPath + enemyDataContainer.enemyData.enemyType + "EnemyDataContainer.asset");
+        if (scriptableObjectPaths == null)
+            Debug.Log($"ScriptableObject is null");
+        else
+            Debug.Log($"ScriptableObject lemghth is " + scriptableObjectPaths.Count);
 
+        foreach (var p in scriptableObjectPaths)
+        {
+            var key = p.Key;
+            var value = p.Value;
+
+            Debug.Log($"ScriptableObject: {key}, Path: {value}");
+        }
+        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.rangeMovementSettingsData, enemyDataContainer.enemyData.enemyType + "RangeMovementSettingsData.asset");
+        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.actionSettings, enemyDataContainer.enemyData.enemyType + "ActionSettingsData.asset");
+        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.chasingSettings, enemyDataContainer.enemyData.enemyType + "ChasingSettingsData.asset");
+        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData.movementSettings, enemyDataContainer.enemyData.enemyType + "MovementSettingsData.asset");
+        CreateOrUpdateAsset(enemyDataContainer.enemyMovementData, enemyDataContainer.enemyData.enemyType + "EnemyMovementData.asset");
+        CreateOrUpdateAsset(enemyDataContainer.enemyDodgeData, enemyDataContainer.enemyData.enemyType + "EnemyDodgeData.asset");
+        CreateOrUpdateAsset(enemyDataContainer.enemyData, enemyDataContainer.enemyData.enemyType + "EnemyData.asset");
+        CreateOrUpdateAsset(enemyDataContainer, enemyDataContainer.enemyData.enemyType + "EnemyDataContainer.asset");
+
+        if (scriptableObjectPaths == null)
+            Debug.Log($"ScriptableObject is null");
+        else
+            Debug.Log($"ScriptableObject lemghth is " + scriptableObjectPaths.Count);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
 
-    void CreateOrUpdateAsset(ScriptableObject asset, string path)
+    void CreateOrUpdateAsset(ScriptableObject asset, string name)
     {
+        Debug.Log("asset: " + asset + " | new path : " + name);
+
         if (scriptableObjectPaths.ContainsKey(asset))
         {
-            if (scriptableObjectPaths[asset] != path)
+            if (scriptableObjectPaths[asset] != name)
             {
-                AssetDatabase.CreateAsset(asset, path);
+                Debug.Log("asset: " + asset + " | asset path : " + scriptableObjectPaths[asset]);
+                var message = AssetDatabase.RenameAsset(scriptableObjectPaths[asset], name);
+                Debug.Log(message);
             }
-        }
-        var existingAsset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-
-        if (existingAsset != null && existingAsset.GetType() != asset.GetType())
-        {
-            AssetDatabase.DeleteAsset(path);
-            existingAsset = null;
-        }
-
-        if (existingAsset == null)
-        {
-            AssetDatabase.CreateAsset(asset, path);
         }
         else
         {
-            EditorUtility.CopySerialized(asset, existingAsset);
-            EditorUtility.SetDirty(existingAsset);
+            var existingAsset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPath + name);
+
+            if (existingAsset != null && existingAsset.GetType() != asset.GetType())
+            {
+                DeleteAssetOnPath(asset);
+                existingAsset = null;
+            }
+
+            if (existingAsset == null)
+            {
+                scriptableObjectPaths.Add(asset, assetPath + name);
+                AssetDatabase.CreateAsset(asset, assetPath + name);
+            }
+            else
+            {
+                EditorUtility.CopySerialized(asset, existingAsset);
+                EditorUtility.SetDirty(existingAsset);
+            }
         }
 
         AssetDatabase.SaveAssets();
@@ -391,20 +413,28 @@ public class EnemyCreatorWindow : EditorWindow
                 scriptableObjectPaths.Remove(obj);
             }
         }
+        else
+        {
+            foreach (var scriptableObject in scriptableObjectPaths)
+            {
+                if(scriptableObject.Key == null)
+                {
+                    scriptableObjectPaths.Remove(scriptableObject.Key);
+                }
+            }
+        }
     }
 
-    void CreateEnemy()
+    bool CreateEnemy()
     {
         if (!string.IsNullOrEmpty(enemyDataContainer.enemyData.enemyType))
         {
             GameObject enemy = new(enemyDataContainer.enemyData.enemyType);
             enemy.tag = "Enemy";
             enemy.layer = LayerMask.NameToLayer("Enemy");
-            Enemy enemyComponent = enemy.AddComponent<Enemy>();
-            //GameObject enemyObject = new GameObject(enemyTypeString);
-            //Enemy enemy = ScriptableObject.CreateInstance<Enemy>();
-            enemyComponent.Initialize(enemyDataContainer.enemyData);
 
+            Enemy enemyComponent = enemy.AddComponent<Enemy>();
+            enemyComponent.Initialize(enemyDataContainer.enemyData);
 
             SpriteRenderer spriteRenderer = enemy.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = enemyDataContainer.enemyData.enemySprite;
@@ -412,7 +442,7 @@ public class EnemyCreatorWindow : EditorWindow
             Animator animator = enemy.AddComponent<Animator>();
             animator.runtimeAnimatorController = enemyDataContainer.enemyData.enemyAnimatorController;
 
-            HealthComponent healthComponent = enemy.AddComponent<HealthComponent>();
+            EnemyHealthComponent healthComponent = enemy.AddComponent<EnemyHealthComponent>();
             healthComponent.MaxHealth = enemyDataContainer.enemyData.maxHealth;
 
             EnemyMovement enemyMovement = enemy.AddComponent<EnemyMovement>();
@@ -453,7 +483,6 @@ public class EnemyCreatorWindow : EditorWindow
             BoxCollider2D boxCollider2D = enemy.AddComponent<BoxCollider2D>();
             boxCollider2D.isTrigger = false;
 
-            // Save as prefab in the project
             string localPath = "Assets/Prefab/Enemies/Prefabs/" + enemyDataContainer.enemyData.enemyType + ".prefab";
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
             var enemyPrefab = PrefabUtility.SaveAsPrefabAsset(enemy, localPath);
@@ -469,9 +498,8 @@ public class EnemyCreatorWindow : EditorWindow
                 Debug.LogError("EnemyManager not found in scene.");
             }
 
-            //// Save the asset
-            //AssetDatabase.CreateAsset(enemy, localPath);
-            //AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssets();
+
             //EditorUtility.FocusProjectWindow();
             //Selection.activeObject = enemy;
 
@@ -479,10 +507,12 @@ public class EnemyCreatorWindow : EditorWindow
             Destroy(enemy);
 
             Debug.Log("Enemy created and saved as prefab at " + localPath);
+            return true;
         }
         else
         {
-            EditorGUILayout.HelpBox("Enter enemy name", MessageType.Warning);
+            Debug.Log($"false");
+            return false;
         }
 
     }
@@ -516,21 +546,18 @@ public class EnemyCreatorWindow : EditorWindow
         if (enemyDataContainer.enemyMovementData.movementSettings == null)
         {
             enemyDataContainer.enemyMovementData.movementSettings = ScriptableObject.CreateInstance<SpiralMovementSettingsData>();
-            //previousMovementSettingsSO = enemyDataContainer.enemyMovementData.movementSettings;
         }
         _serializedMovementSettings = new SerializedObject(enemyDataContainer.enemyMovementData.movementSettings);
 
         if (enemyDataContainer.enemyMovementData.chasingSettings == null)
         {
             enemyDataContainer.enemyMovementData.chasingSettings = ScriptableObject.CreateInstance<SpiralChasingSettingsData>();
-            //previousChasingSettingsSO = enemyDataContainer.enemyMovementData.chasingSettings;
         }
         _serializedChasingSettings = new SerializedObject(enemyDataContainer.enemyMovementData.chasingSettings);
 
         if (enemyDataContainer.enemyMovementData.actionSettings == null)
         {
             enemyDataContainer.enemyMovementData.actionSettings = ScriptableObject.CreateInstance<DashActionSettingsData>();
-            //previousActionSettingsSO = enemyDataContainer.enemyMovementData.actionSettings;
         }
         _serializedActionSettings = new SerializedObject(enemyDataContainer.enemyMovementData.actionSettings);
 

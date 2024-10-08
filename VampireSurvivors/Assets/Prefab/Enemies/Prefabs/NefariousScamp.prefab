@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 6568099103090277922}
   - component: {fileID: 8048202614285249700}
   - component: {fileID: 2270999283093891308}
-  - component: {fileID: 4111657355034276765}
   - component: {fileID: 5396476076192669406}
   - component: {fileID: 956423847364055045}
   - component: {fileID: 1676512145857969074}
   - component: {fileID: 2389497187207452624}
+  - component: {fileID: 2231549593133523718}
   m_Layer: 7
   m_Name: NefariousScamp
   m_TagString: Enemy
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: NefariousScamp
   _typeXPGem: 0
-  _damage: 2
+  _damage: 5
   _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
 --- !u!212 &8048202614285249700
 SpriteRenderer:
@@ -128,24 +128,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4111657355034276765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5785098323252071192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f55b98b5b3f6ec644b0e4768c9e4ae2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 2
-  maxHealthMultiplier: 1
-  healMultiplier: 1
-  increasingMultiplier: 0.1
-  healUpdateTime: 1
-  healModifier: 0.2
 --- !u!114 &5396476076192669406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,3 +246,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6875, y: 0.5625}
   m_EdgeRadius: 0
+--- !u!114 &2231549593133523718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5785098323252071192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6792675711a610143b02cfe4a636fb66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1

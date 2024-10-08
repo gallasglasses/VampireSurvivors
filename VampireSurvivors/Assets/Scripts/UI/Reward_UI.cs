@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Reward_UI : MonoBehaviour
@@ -13,11 +14,28 @@ public class Reward_UI : MonoBehaviour
 
     public List<RewardSlot_UI> slots = new List<RewardSlot_UI>();
 
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
     void Start()
     {
         CreateSlots();
 
         rewardPanel.SetActive(false);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (rewardManager == null)
+        {
+            rewardManager = GameObject.Find("RewardManager")?.GetComponent<RewardManager>();
+            if (rewardManager == null)
+            {
+                Debug.LogError("rewardManager not found!");
+            }
+        }
     }
 
     public void RefreshRewardPanel (List<Reward> rewards)
@@ -49,6 +67,11 @@ public class Reward_UI : MonoBehaviour
     {
         ToggleInventory();
         rewardManager.ActivateReward(type);
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
 }

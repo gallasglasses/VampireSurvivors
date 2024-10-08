@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyType: NefariousScamp
   enemySprite: {fileID: -5561025109323276024, guid: 659a51be467b7ae47bc9bd4d9a5ebb73, type: 3}
   enemyAnimatorController: {fileID: -7341034606885793232, guid: 659a51be467b7ae47bc9bd4d9a5ebb73, type: 3}
-  maxHealth: 2
+  maxHealth: 0.5
   typeXPGem: 0
-  damage: 2
+  damage: 5
   bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}

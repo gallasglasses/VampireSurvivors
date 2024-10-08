@@ -75,7 +75,7 @@ public class Enemy : GameplayMonoBehaviour
         return _type;
     }
 
-    protected virtual void OnEnable()
+    private void OnEnable()
     {
         if (spriteRenderer = GetComponent<SpriteRenderer>())
         {
@@ -89,11 +89,6 @@ public class Enemy : GameplayMonoBehaviour
         if (enemyMovement = GetComponent<EnemyMovement>())
         {
             enemyMovement.RangeMovementSettings.OnExclusion += HandleRelease;
-            Debug.Log("enemyMovement = GetComponent<EnemyMovement>()");
-        }
-        else
-        {
-            Debug.LogWarning("enemyMovement = GetComponent<EnemyMovement>()");
         }
         _hasBeenReleased = false;
     }
@@ -156,7 +151,7 @@ public class Enemy : GameplayMonoBehaviour
         spriteRenderer.color = Color.white;
     }
 
-    protected void HandleDamage(float receivedDamage)
+    private void HandleDamage(float receivedDamage)
     {
         //Debug.Log("HandleDamage");
         if(spriteRenderer != null)
@@ -170,7 +165,7 @@ public class Enemy : GameplayMonoBehaviour
         // receivedDamage - UI ?
     }
 
-    protected void HandleDeath()
+    private void HandleDeath()
     {
         //Debug.Log("HandleDeath");
         Unsubcribe();
@@ -183,7 +178,7 @@ public class Enemy : GameplayMonoBehaviour
         }
     }
 
-    protected void HandleRelease()
+    private void HandleRelease()
     {
         //Debug.Log("HandleRelease");
         Unsubcribe();
@@ -206,7 +201,7 @@ public class Enemy : GameplayMonoBehaviour
         _pool = pool;
     }
 
-    protected virtual void Unsubcribe()
+    private void Unsubcribe()
     {
         if (healthComponent != null)
         {

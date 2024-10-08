@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static UnityEngine.EventSystems.EventTrigger;
 using Random = UnityEngine.Random;
 
 public class EnemyManager : GameplayMonoBehaviour
 {
+    public static EnemyManager Instance { get; private set; }
     [Header("Wave Settings")]
     [SerializeField] private float waveDuration = 60f;
     [SerializeField] private int maxWaves = 10;
     [SerializeField] private float intervalDuration = 10f;
     private float nextWaveTime = 0;
     private float nextIntervalTime = 0;
-    private int spawnedWaves = 0; 
+    private int spawnedWaves = -1; 
     private int currentInterval = 0;
     private bool isSpawningResiduals = false;
 
@@ -47,9 +50,41 @@ public class EnemyManager : GameplayMonoBehaviour
 
     protected override void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         base.Awake();
         UpdateEnemiesDictionary();
+
     }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (enemySpawner == null)
+        {
+            enemySpawner = GetComponent<EnemySpawner>();
+        }
+        if (gemSpawner == null)
+        {
+            gemSpawner = GetComponent<GemSpawner>();
+        }
+        enemiesAlive = 0;
+        enemiesSpawnedThisWave = 0;
+        currentInterval = 0;
+        spawnedWaves = -1;
+        Debug.Log($"spawnedWaves: {spawnedWaves}");
+        isSpawningResiduals = false;
+        nextWaveTime = Time.time;
+        nextIntervalTime = Time.time;
+    }
+
     public void PrintEnemiesDict(Dictionary<string, Enemy> enemies)
     {
         foreach (var p in enemies)
@@ -80,6 +115,19 @@ public class EnemyManager : GameplayMonoBehaviour
         nextIntervalTime = Time.time;
     }
 
+    protected override void FinishableUpdate()
+    {
+        base.FinishableUpdate();
+        if (enemySpawner != null)
+        {
+            enemySpawner.ReturnActiveObjectsToPool();
+        }
+        if (gemSpawner != null)
+        {
+            gemSpawner.ReturnActiveObjectsToPool();
+        }
+    }
+
     protected override void UnPausableUpdate()
     {
         if(GetPauseDuration() > 0)
@@ -91,7 +139,10 @@ public class EnemyManager : GameplayMonoBehaviour
 
         if (Time.time >= nextWaveTime)
         {
+            spawnedWaves++;
             StartNewWave();
+
+            Debug.Log($"Spawned wave {spawnedWaves} ");
 
             nextWaveTime = Time.time + waveDuration;
         }
@@ -115,9 +166,6 @@ public class EnemyManager : GameplayMonoBehaviour
         isSpawningResiduals = false;
 
         nextIntervalTime = Time.time + intervalDuration;
-        spawnedWaves++;
-
-        //Debug.Log($"Spawned wave {spawnedWaves} ");
         SpawnIntervalEnemies();
         currentInterval++;
         nextIntervalTime = Time.time + intervalDuration;
@@ -125,9 +173,8 @@ public class EnemyManager : GameplayMonoBehaviour
 
     void SpawnIntervalEnemies()
     {
-        //Debug.Log("StartNewWave");
         enemiesPerInterval = Mathf.RoundToInt(CalculateEnemiesForTime(Time.time));
-        //Debug.Log($"Spawning {enemiesPerInterval} enemies for interval {currentInterval + 1}");
+        Debug.Log($"Spawning {enemiesPerInterval} enemies for interval {currentInterval + 1}");
         for (int i = 0; i < enemiesPerInterval; i++)
         {
             SpawnEnemy();
@@ -156,12 +203,9 @@ public class EnemyManager : GameplayMonoBehaviour
         Enemy enemyToSpawn = null;
         if (enemySpawner.pools.TryGetValue(selectedEnemyType, out var pool))
         {
+            Debug.Log($"selectedEnemyType : {selectedEnemyType} | pool : {pool}");
             enemyToSpawn = pool.Get();
-            //Debug.Log($"Spawning enemy of type: {selectedEnemyType}");
-        }
-        else
-        {
-            //Debug.LogError($"EnemyType '{selectedEnemyType}' not found in pools.");
+            Debug.Log($"enemyToSpawn : {enemyToSpawn}");
         }
 
         enemyToSpawn.transform.position = GetRandomSpawnPosition();
@@ -300,5 +344,14 @@ public class EnemyManager : GameplayMonoBehaviour
         {
             enemiesDict[enemyTypes[i]] = enemyPrefabs[i];
         }
+    }
+
+    private void OnDisable()
+    {
+        if (playerMovement != null)
+        {
+            playerMovement.OnMovementChanged -= HandlePlayerMovementChanged;
+        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

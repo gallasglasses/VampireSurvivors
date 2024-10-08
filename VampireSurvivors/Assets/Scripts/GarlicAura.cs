@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GarlicAura : GameplayMonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GarlicAura : GameplayMonoBehaviour
     //[SerializeField] private float auraRadius = 1f; // for changing radius of collision
     public LayerMask enemyLayer;
     private Animator garlicAnimator;
+    private SpriteRenderer spriteRenderer;
 
     private float nextCooldown;
     private float powerUpDamage = 1;
@@ -20,17 +22,51 @@ public class GarlicAura : GameplayMonoBehaviour
     protected override void Awake()
     {
         base.Awake();
-        garlicAnimator = GetComponent<Animator>();
-
-        if (garlicAnimator == null)
-        {
-            Debug.LogError("Animator component not found on this GameObject.");
-        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void Start()
     {
-        originalAnimationSpeed = garlicAnimator.speed;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        powerUpDamage = 1;
+        isGarlicEnable = false;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = null;
+        }
+
+        garlicAnimator = GetComponent<Animator>();
+        if (garlicAnimator == null)
+        {
+            Debug.LogError("Animator component not found on this GameObject.");
+        }
+        else
+        {
+            garlicAnimator.speed = 1f;
+            garlicAnimator.ResetTrigger("EnableAuraTrigger");
+            garlicAnimator.enabled = false;
+        }
+    }
+
+    protected override void FinishableUpdate()
+    {
+        base.FinishableUpdate();
+        isGarlicEnable = false;
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = null;
+        }
+        if (garlicAnimator != null)
+        {
+            garlicAnimator.speed = 0f;
+            garlicAnimator.ResetTrigger("EnableAuraTrigger");
+            garlicAnimator.enabled = false;
+        }
     }
 
     protected override void UnPausableUpdate()
@@ -44,7 +80,7 @@ public class GarlicAura : GameplayMonoBehaviour
         }
         if (garlicAnimator != null)
         {
-            garlicAnimator.speed = originalAnimationSpeed;
+            garlicAnimator.speed = 1f;
         }
         if (isGarlicEnable)
         {
@@ -65,6 +101,7 @@ public class GarlicAura : GameplayMonoBehaviour
     {
         if (garlicAnimator != null)
         {
+            garlicAnimator.speed = 1f;
             garlicAnimator.enabled = true; 
             garlicAnimator.SetTrigger("EnableAuraTrigger");
         }
@@ -113,6 +150,11 @@ public class GarlicAura : GameplayMonoBehaviour
         {
             cooldownData.cooldownEndTime += pauseDuration;
         }
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
 

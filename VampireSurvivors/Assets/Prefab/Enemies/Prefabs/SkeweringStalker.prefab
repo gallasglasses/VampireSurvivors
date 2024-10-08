@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 4347713455681357526}
   - component: {fileID: 4947393413607845093}
   - component: {fileID: 7717527671615743300}
-  - component: {fileID: 3724133211949973816}
   - component: {fileID: 8139980340349604578}
   - component: {fileID: 4351531740078650170}
   - component: {fileID: 2639552127292186712}
   - component: {fileID: 6979142071912971262}
+  - component: {fileID: -1663939729656896117}
   m_Layer: 7
   m_Name: SkeweringStalker
   m_TagString: Enemy
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: SkeweringStalker
   _typeXPGem: 1
-  _damage: 5
+  _damage: 1
   _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
 --- !u!212 &4947393413607845093
 SpriteRenderer:
@@ -128,24 +128,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3724133211949973816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4134689473197062222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f55b98b5b3f6ec644b0e4768c9e4ae2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 5
-  maxHealthMultiplier: 1
-  healMultiplier: 1
-  increasingMultiplier: 0.1
-  healUpdateTime: 1
-  healModifier: 0.2
 --- !u!114 &8139980340349604578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,3 +246,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.625, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-1663939729656896117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4134689473197062222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6792675711a610143b02cfe4a636fb66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1

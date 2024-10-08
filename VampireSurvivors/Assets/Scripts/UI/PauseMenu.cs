@@ -6,14 +6,46 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private GameObject uiPanel;
+    [SerializeField] private GameObject uiBackground;
+
+    private void Awake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (playerController == null)
+        {
+            playerController = GameObject.Find("Player")?.GetComponent<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogError("playerController not found!");
+            }
+        }
+    }
 
     public void ContinueGame()
     {
+        ToggleUI();
         playerController.HandlePause();
     }
 
     public void QuitGame()
     {
+        ToggleUI();
         Application.Quit();
+    }
+
+    public void ToggleUI()
+    {
+        uiPanel.SetActive(!uiPanel.activeSelf);
+        uiBackground.SetActive(!uiBackground.activeSelf);
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

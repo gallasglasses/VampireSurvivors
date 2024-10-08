@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7eeaa7e46ddc7e43b3bfbd724fb1839, type: 3}
-  m_Name: MovementSettingsData
+  m_Script: {fileID: 11500000, guid: 3b80e3db933ef8447a3b1e0c6c58bded, type: 3}
+  m_Name: FloatingEyeMovementSettingsData
   m_EditorClassIdentifier: 
-  SpiralTightnessRange: {x: 0, y: 0}
-  SpiralRadiusIncreaseTime: 0
+  WaveAmplitudeRange: {x: 1, y: 3}
+  WaveFrequency: 2
+  AngleRange: 0

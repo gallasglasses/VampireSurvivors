@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyType: SkeweringStalker
   enemySprite: {fileID: 7525820460358766162, guid: 56d849c0cb25bbf4db7311014b5739fc, type: 3}
   enemyAnimatorController: {fileID: 8693599120282270143, guid: 56d849c0cb25bbf4db7311014b5739fc, type: 3}
-  maxHealth: 5
+  maxHealth: 1
   typeXPGem: 1
-  damage: 5
+  damage: 1
   bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}

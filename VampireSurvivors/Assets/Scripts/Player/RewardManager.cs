@@ -17,6 +17,7 @@ public enum TypeReward
 
 public class RewardManager : MonoBehaviour
 {
+    public static RewardManager Instance { get; private set; }
     private List<Reward> rewards = new List<Reward>();
     [SerializeField] private Effects effects;
     [SerializeField] private UIManager uiManager;
@@ -25,6 +26,19 @@ public class RewardManager : MonoBehaviour
     [SerializeField] private MyDictionary<TypeReward, Sprite> rewardsDictionary;
     public Dictionary<TypeReward, Sprite> rewardsDict = new Dictionary<TypeReward, Sprite>();
     private ExperienceComponent xpComponent;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -94,7 +108,7 @@ public class RewardManager : MonoBehaviour
 
     void IncreaseHealth()
     {
-        var healthComponent = GameManager.Instance.player.GetComponent<HealthComponent>();
+        var healthComponent = GameManager.Instance.player.GetComponent<PlayerHealthComponent>();
         if (healthComponent != null)
         {
             Debug.Log("Reward IncreaseHealth");
@@ -104,7 +118,7 @@ public class RewardManager : MonoBehaviour
 
     void IncreaseAutoHeal()
     {
-        var healthComponent = GameManager.Instance.player.GetComponent<HealthComponent>();
+        var healthComponent = GameManager.Instance.player.GetComponent<PlayerHealthComponent>();
         if (healthComponent != null)
         {
             Debug.Log("Reward IncreaseAutoHeal");
@@ -155,6 +169,14 @@ public class RewardManager : MonoBehaviour
         {
             Debug.Log("Reward IncreaseAura");
             weaponComponent.PowerUpGarlic();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (xpComponent != null)
+        {
+            xpComponent.OnLevelUp -= OnLevelUp;
         }
     }
 }

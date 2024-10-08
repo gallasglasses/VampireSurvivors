@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f97a2c992c1fb724bbcc4ad06b385640, type: 3}
-  m_Name: ActionSettingsData
+  m_Script: {fileID: 11500000, guid: 48592f47e94bc8a47957ea8b6e820aaa, type: 3}
+  m_Name: WarpSkullChasingSettingsData
   m_EditorClassIdentifier: 
-  CircleRadius: 0
+  WaveAmplitudeRange: {x: 1, y: 2}
+  WaveFrequency: 1
+  AngleRange: 0

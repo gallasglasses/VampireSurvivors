@@ -21,6 +21,7 @@ public class Projectile : GameplayMonoBehaviour
 
     protected override void Awake()
     {
+        base.Awake();
         body = GetComponent<Rigidbody2D>();
     }
 

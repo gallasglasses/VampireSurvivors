@@ -2,21 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class HealthComponent : GameplayMonoBehaviour
 {
     [Range(1f, 100f)] 
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float maxHealthMultiplier = 1f;
-    [SerializeField] private float healMultiplier = 1f;
-    [SerializeField] private float increasingMultiplier = 0.1f;
-    [SerializeField] private float healUpdateTime = 1f;
-    [SerializeField] private float healModifier = 0.2f;
+    [SerializeField] protected float maxHealth = 100f;
 
-    private float health = 0f;
-    private bool isAutoHeal = false;
-
-    private Coroutine autoHealCoroutine;
+    protected float health = 0f;
 
     public event Action OnDeath;
     public event Action OnHealthChanged;
@@ -29,30 +22,28 @@ public class HealthComponent : GameplayMonoBehaviour
         get => maxHealth;
         set => maxHealth = value;
     }
-    public void Initialize(
-        float maxHealth, 
-        float maxHealthMultiplier, 
-        float healMultiplier, 
-        float increasingMultiplier, 
-        float healUpdateTime, 
-        float healModifier)
+    public virtual void Initialize(
+        float maxHealth)
     {
         this.maxHealth = maxHealth;
-        this.maxHealthMultiplier = maxHealthMultiplier;
-        this.healMultiplier = healMultiplier;
-        this.increasingMultiplier = increasingMultiplier;
-        this.healUpdateTime = healUpdateTime;
-        this.healModifier = healModifier;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
     }
 
     private void OnEnable()
     {
         SetHealth(maxHealth);
+        Debug.Log($"maxHealth {maxHealth}");
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    protected override void UnPausableUpdate()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        StartAutoHeal();
+        SetHealth(maxHealth);
+        Debug.Log($"maxHealth {maxHealth}");
     }
 
     public bool IsDead()
@@ -60,24 +51,28 @@ public class HealthComponent : GameplayMonoBehaviour
         return Mathf.Approximately(health, 0f);
     }
 
-    private void SetHealth(float newHealth)
+    protected void SetHealth(float newHealth)
     {
         var nextHealth = Mathf.Clamp(newHealth, 0f, maxHealth);
         var healthDelta = nextHealth - health;
         health = nextHealth;
+        InvokeHealthAction();
+    }
 
+    protected void InvokeHealthAction()
+    {
         if (OnHealthChanged != null)
         {
             OnHealthChanged?.Invoke();
         }
     }
 
-    private bool IsHealthFull()
+    protected bool IsHealthFull()
     {
         return Mathf.Approximately(health, maxHealth);
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         if (damage <= 0.0f || IsDead()) return;
         SetHealth(health - damage);
@@ -92,7 +87,6 @@ public class HealthComponent : GameplayMonoBehaviour
         {
             OnDeath?.Invoke();
         }
-        StartAutoHeal();
     }
 
     public float GetHealthPercent()
@@ -100,61 +94,8 @@ public class HealthComponent : GameplayMonoBehaviour
 	    return health / maxHealth;
     }
 
-    public void PowerUpHealth()
+    void OnDisable()
     {
-        maxHealthMultiplier = maxHealthMultiplier * increasingMultiplier + maxHealthMultiplier;
-        maxHealth = maxHealth * maxHealthMultiplier;
-
-        //Debug.Log("PowerUpHealth");
-        if (OnHealthChanged != null)
-        {
-            OnHealthChanged?.Invoke();
-        }
-    }
-
-    public void PowerUpAutoHeal()
-    {
-        if(!isAutoHeal)
-        {
-            isAutoHeal = true;
-        }
-        else
-        {
-            //Debug.Log("PowerUpAutoHeal");
-            healMultiplier = healMultiplier * increasingMultiplier + healMultiplier;
-            healModifier = healModifier * healMultiplier;
-        }
-
-    }
-
-    private IEnumerator HealUpdate()
-    {
-        while(!IsHealthFull() && !IsDead())
-        {
-            if (!Paused)
-            {
-                SetHealth(health + healModifier);
-
-                //Debug.Log("Healing... Current Health: " + health);
-                if (IsHealthFull() && IsDead())
-                {
-                    break;
-                }
-                yield return new WaitForSeconds(healUpdateTime);
-            }
-            else
-            {
-                yield return new WaitForSeconds(Time.deltaTime);
-            }
-        }
-        autoHealCoroutine = null;
-    }
-
-    private void StartAutoHeal()
-    {
-        if (isAutoHeal && autoHealCoroutine == null && !IsHealthFull())
-        {
-            autoHealCoroutine = StartCoroutine(HealUpdate());
-        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
