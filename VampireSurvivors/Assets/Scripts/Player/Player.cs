@@ -11,9 +11,16 @@ public class Player : MonoBehaviour
     [SerializeField] private Image healthBarFill;
     [SerializeField] private Slider levelBarSlider;
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI currentAmountKilledEnemies;
     private HealthComponent healthComponent;
     private ExperienceComponent experienceComponent;
     private PlayerController playerController;
+    private KillingComponent killingComponent;
+    private PlayerStats _playerStats = new();
+
+    public PlayerStats PlayerStats
+    { get => _playerStats; }
+
 
     void OnEnable()
     {
@@ -30,6 +37,12 @@ public class Player : MonoBehaviour
         {
             experienceComponent.OnXPChanged += UpdateXPBar;
             experienceComponent.OnLevelUp += UpdateLevelText;
+        }
+
+        killingComponent = GetComponent<KillingComponent>();
+        if (killingComponent != null )
+        {
+            killingComponent.OnKilledNewEnemy += UpdateCurrentAmountKilledEnemies;
         }
     }
 
@@ -49,6 +62,8 @@ public class Player : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         transform.position = Vector3.zero;
         if (healthBarFill == null)
         {
@@ -85,12 +100,24 @@ public class Player : MonoBehaviour
 
     void UpdateLevelText()
     {
+        _playerStats.maxLevel = GetCurrentLevel();
         levelText.text = GetCurrentLevel().ToString();
+    }
+
+    void UpdateCurrentAmountKilledEnemies()
+    {
+        _playerStats.maxEnemiesKilled = GetCurrentAmountKilledEnemies();
+        currentAmountKilledEnemies.text = GetCurrentAmountKilledEnemies().ToString();
     }
 
     public int GetCurrentLevel()
     {
         return experienceComponent.GetLevel();
+    }
+
+    public int GetCurrentAmountKilledEnemies()
+    {
+        return killingComponent.EnemiesKilled;
     }
 
     void UpdateHealthBar()

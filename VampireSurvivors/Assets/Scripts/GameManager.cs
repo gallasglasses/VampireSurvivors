@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Player player;
 
     [SerializeField] private UIManager uiManager;
+    private SaveManager saveManager;
+    private PlayerStats currentStats;
 
     public delegate void OnMatchStateChangedEvent(EMatchState matchState);
     public event OnMatchStateChangedEvent OnMatchStateChanged;
@@ -32,6 +35,8 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         SetMatchState(EMatchState.InProgress);
         uiManager.OnUIStateChanged += SetUIState;
     }
@@ -40,6 +45,24 @@ public class GameManager : MonoBehaviour
     {
         SetMatchState(EMatchState.InProgress);
         uiManager.OnUIStateChanged += SetUIState;
+
+        saveManager = FindObjectOfType<SaveManager>();
+        currentStats = saveManager.LoadStats();
+    }
+
+    private void UpdateStats(PlayerStats playerStats)
+    {
+        if (playerStats.maxLevel > currentStats.maxLevel)
+        {
+            currentStats.maxLevel = playerStats.maxLevel;
+        }
+
+        if (playerStats.maxEnemiesKilled > currentStats.maxEnemiesKilled)
+        {
+            currentStats.maxEnemiesKilled = playerStats.maxEnemiesKilled;
+        }
+
+        saveManager.SaveStats(currentStats);
     }
 
     public void Pause()
@@ -56,6 +79,7 @@ public class GameManager : MonoBehaviour
         if (matchState != EMatchState.GameOver)
         {
             SetMatchState(EMatchState.GameOver);
+            UpdateStats(Player.Instance.PlayerStats);
             Debug.Log($"EMatchState {EMatchState.GameOver}");
         }
     }

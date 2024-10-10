@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Projectile : GameplayMonoBehaviour
+public class Projectile : KillingActor
 {
     [SerializeField] private float force = 10f;
     [SerializeField] private float damage = 1f;
@@ -74,7 +74,8 @@ public class Projectile : GameplayMonoBehaviour
         {
             if (collision.gameObject.TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
             {
-                healthComponent.TakeDamage(damage * powerUpDamage);
+                DeliverEnemy(collision.gameObject);
+                healthComponent.TakeDamage(damage * powerUpDamage, true);
             }
 
             _hasBeenReleased = true;

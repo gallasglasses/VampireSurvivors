@@ -22,8 +22,7 @@ public class WeaponComponent : GameplayMonoBehaviour
     private bool isReadyAttack;
     private bool isGarlicTurnOn = false;
     private float timer;
-    [SerializeField] private float timeBetweenFire;
-    //[SerializeField] private float delay = 0.1f;
+    [SerializeField] private float cooldown;
     [SerializeField] private float powerUpStep = 1f;
     [SerializeField] private float increasingMultiplier = 0.5f;
     [SerializeField] private float spawnRadius = 5f;
@@ -47,6 +46,8 @@ public class WeaponComponent : GameplayMonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         if (mainCamera == null)
         {
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -86,7 +87,7 @@ public class WeaponComponent : GameplayMonoBehaviour
         if (!canFire)
         {
             timer += Time.deltaTime;
-            if (timer > timeBetweenFire)
+            if (timer > cooldown)
             {
                 canFire = true;
                 timer = 0;
@@ -95,13 +96,14 @@ public class WeaponComponent : GameplayMonoBehaviour
 
         if (isReadyAttack && canFire)
         {
+            canFire = false; // 
             Attack();
         }
     }
 
     private void StartShooting()
     {
-        float initialAngle = GetRawRotation();
+        float initialAngle = GetMouseRawRotation();
         float angleStep = 360f / projectileCount;
         for (int i = 0; i < projectileCount; i++)
         {
@@ -124,16 +126,16 @@ public class WeaponComponent : GameplayMonoBehaviour
         }
     }
 
-    public Vector3 GetDirection()
+    public Vector3 GetMouseDirection()
     {
         mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
         return mousePosition - transform.position;
     }
 
-    public float GetRawRotation()
+    public float GetMouseRawRotation()
     {
-        Vector3 direction = GetDirection();
+        Vector3 direction = GetMouseDirection();
         return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
     }
 

@@ -55,6 +55,7 @@ MonoBehaviour:
   _typeXPGem: 1
   _damage: 1
   _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _enemyDataContainer: {fileID: 11400000, guid: a3315fac61c09bb499c216d0777d9ef3, type: 2}
 --- !u!212 &4947393413607845093
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -153,7 +154,7 @@ MonoBehaviour:
     _detectionRange: 6
     _exclusionRange: 20
     _minTimeBeforeExclusion: 3
-  _enemyDataContainer: {fileID: 11400000, guid: a3315fac61c09bb499c216d0777d9ef3, type: 2}
+  _enemyMovementData: {fileID: 11400000, guid: d6d5fe8a1faf3d24ea0f056be8fd38f9, type: 2}
 --- !u!114 &4351531740078650170
 MonoBehaviour:
   m_ObjectHideFlags: 0

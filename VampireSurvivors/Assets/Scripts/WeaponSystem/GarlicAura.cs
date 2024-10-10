@@ -15,7 +15,11 @@ public class GarlicAura : GameplayMonoBehaviour
 
     private float nextCooldown;
     private float powerUpDamage = 1;
-    private bool isGarlicEnable = false;
+    private bool isEnabled = false;
+    public bool IsEnabled
+    {
+        get => isEnabled; set => isEnabled = value;
+    }
 
     private List<EnemyCooldownData> enemiesInCooldown = new List<EnemyCooldownData>();
     
@@ -32,7 +36,7 @@ public class GarlicAura : GameplayMonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         powerUpDamage = 1;
-        isGarlicEnable = false;
+        isEnabled = false;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
@@ -56,7 +60,7 @@ public class GarlicAura : GameplayMonoBehaviour
     protected override void FinishableUpdate()
     {
         base.FinishableUpdate();
-        isGarlicEnable = false;
+        isEnabled = false;
         if (spriteRenderer != null)
         {
             spriteRenderer.sprite = null;
@@ -82,7 +86,7 @@ public class GarlicAura : GameplayMonoBehaviour
         {
             garlicAnimator.speed = 1f;
         }
-        if (isGarlicEnable)
+        if (isEnabled)
         {
             UpdateCooldowns();
         }
@@ -109,13 +113,13 @@ public class GarlicAura : GameplayMonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") && isGarlicEnable)
+        if (collision.CompareTag("Enemy") && isEnabled)
         {
             if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy) && !IsEnemyOnCooldown(enemy))
             {
                 if (collision.gameObject.TryGetComponent<HealthComponent>(out HealthComponent healthComponent))
                 {
-                    healthComponent.TakeDamage(damage * powerUpDamage);
+                    healthComponent.TakeDamage(damage * powerUpDamage, true);
                     nextCooldown = Time.time + cooldown;
                     enemiesInCooldown.Add(new EnemyCooldownData(enemy, nextCooldown));
                 }
@@ -130,7 +134,7 @@ public class GarlicAura : GameplayMonoBehaviour
 
     public void EnableAura()
     {
-        isGarlicEnable = true;
+        isEnabled = true;
         //Debug.Log($"EnableAura");
         TriggerAnimation();
     }

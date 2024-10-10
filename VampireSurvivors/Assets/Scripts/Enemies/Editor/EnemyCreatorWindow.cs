@@ -436,6 +436,8 @@ public class EnemyCreatorWindow : EditorWindow
             Enemy enemyComponent = enemy.AddComponent<Enemy>();
             enemyComponent.Initialize(enemyDataContainer.enemyData);
 
+            enemyComponent.EnemyDataContainer = enemyDataContainer;
+
             SpriteRenderer spriteRenderer = enemy.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = enemyDataContainer.enemyData.enemySprite;
 
@@ -461,7 +463,7 @@ public class EnemyCreatorWindow : EditorWindow
                 enemyDataContainer.enemyMovementData.rangeMovementSettingsData._exclusionRange,
                 enemyDataContainer.enemyMovementData.rangeMovementSettingsData._minTimeBeforeExclusion);
 
-            enemyMovement.EnemyDataContainer = enemyDataContainer;
+            enemyMovement.EnemyMovementData = enemyDataContainer.enemyMovementData;
 
             EnemyDodge enemyDodge = enemy.AddComponent<EnemyDodge>();
             enemyDodge.Initialize(

@@ -27,6 +27,8 @@ public class ExperienceComponent : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         currentXP = 0;
         currentLvl = 0;
         maxLvlXP = 5;

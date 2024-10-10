@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class ProjectileSpawner : MonoBehaviour
 {
     public ObjectPool<Projectile> _pool;
+    [SerializeField] private int _spawnCount = 100;
     private List<Projectile> activeProjectiles = new List<Projectile>();
     private WeaponComponent weaponComponent;
     private bool isReturningActiveObjectsToPool = false;
@@ -19,6 +20,8 @@ public class ProjectileSpawner : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         isReturningActiveObjectsToPool = false;
         CreatePool();
     }
@@ -46,13 +49,13 @@ public class ProjectileSpawner : MonoBehaviour
 
     private void Start()
     {
-        //CreatePool();
+        //
     }
 
     private void CreatePool()
     {
         weaponComponent = GetComponent<WeaponComponent>();
-        _pool = new ObjectPool<Projectile>(CreateProjectile, OnTakeProjectileFromPool, OnReturnProjectileToPool, OnDestroyProjectile, true, 100, 200);
+        _pool = new ObjectPool<Projectile>(CreateProjectile, OnTakeProjectileFromPool, OnReturnProjectileToPool, OnDestroyProjectile, true, _spawnCount, _spawnCount);
     }
 
     private Projectile CreateProjectile()

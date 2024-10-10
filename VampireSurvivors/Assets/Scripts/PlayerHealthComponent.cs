@@ -36,9 +36,9 @@ public class PlayerHealthComponent : HealthComponent
         StartAutoHeal();
     }
 
-    public override void TakeDamage(float damage)
+    public override void TakeDamage(float damage, bool isEnemyDamaged)
     {
-        base.TakeDamage(damage);
+        base.TakeDamage(damage, false);
         StartAutoHeal();
     }
 

@@ -30,6 +30,12 @@ public class Enemy : GameplayMonoBehaviour
     public event OnDeathEvent OnDeath;
     public event Action OnRelease;
 
+    [SerializeField] private EnemyDataContainer _enemyDataContainer;
+    public EnemyDataContainer EnemyDataContainer
+    {
+        set => _enemyDataContainer = value;
+    }
+
     public string Type
     {
         get => _type;
@@ -83,6 +89,7 @@ public class Enemy : GameplayMonoBehaviour
         }
         if (healthComponent = GetComponent<HealthComponent>())
         {
+            healthComponent.Initialize(_enemyDataContainer.enemyData.maxHealth);
             healthComponent.OnDeath += HandleDeath;
             healthComponent.OnTakeDamage += HandleDamage;
         }
@@ -126,7 +133,7 @@ public class Enemy : GameplayMonoBehaviour
 
             if (other.TryGetComponent<HealthComponent>(out HealthComponent playerHealth))
             {
-                playerHealth.TakeDamage(_damage);
+                playerHealth.TakeDamage(_damage, false);
             }
         }
     }

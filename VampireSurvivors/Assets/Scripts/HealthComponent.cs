@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Collections;
 using System;
 using UnityEngine.SceneManagement;
 
 public class HealthComponent : GameplayMonoBehaviour
 {
-    [Range(1f, 100f)] 
+    [Range(0f, 100f)]
     [SerializeField] protected float maxHealth = 100f;
 
     protected float health = 0f;
 
     public event Action OnDeath;
+    public event Action OnEnemyKilled;
     public event Action OnHealthChanged;
 
     public delegate void OnTakeDamageEvent(float _damage);
@@ -33,7 +35,7 @@ public class HealthComponent : GameplayMonoBehaviour
         base.Awake();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         SetHealth(maxHealth);
         Debug.Log($"maxHealth {maxHealth}");
@@ -42,8 +44,10 @@ public class HealthComponent : GameplayMonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         SetHealth(maxHealth);
-        Debug.Log($"maxHealth {maxHealth}");
+        //Debug.Log($"maxHealth {maxHealth}");
     }
 
     public bool IsDead()
@@ -72,7 +76,7 @@ public class HealthComponent : GameplayMonoBehaviour
         return Mathf.Approximately(health, maxHealth);
     }
 
-    public virtual void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage, bool isEnemyDamaged)
     {
         if (damage <= 0.0f || IsDead()) return;
         SetHealth(health - damage);
@@ -86,6 +90,10 @@ public class HealthComponent : GameplayMonoBehaviour
         if (IsDead() && OnDeath != null)
         {
             OnDeath?.Invoke();
+            if(isEnemyDamaged)
+            {
+                OnEnemyKilled?.Invoke();
+            }
         }
     }
 

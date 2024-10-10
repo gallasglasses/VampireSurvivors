@@ -12,7 +12,11 @@ public class Movement : GameplayMonoBehaviour
 
     private float originalSpeed;
     private SpriteRenderer spriteRenderer;
-    private Vector2 direction = Vector2.zero;
+    private Vector2 playerMovementDirection = Vector2.zero;
+    public Vector2 PlayerMovementDirection
+    {
+        get => playerMovementDirection;
+    }
 
     public Animator animator;
 
@@ -41,20 +45,20 @@ public class Movement : GameplayMonoBehaviour
         {
             animator.speed = originalAnimationSpeed;
         }
-        this.transform.position += new Vector3(direction.x * originalSpeed * Time.deltaTime, direction.y * originalSpeed * Time.deltaTime, this.transform.position.z); 
+        this.transform.position += new Vector3(playerMovementDirection.x * originalSpeed * Time.deltaTime, playerMovementDirection.y * originalSpeed * Time.deltaTime, this.transform.position.z); 
     }
 
     private void AnimateMovement()
     {
         if (animator != null)
         {
-            if(direction.magnitude > 0)
+            if(playerMovementDirection.magnitude > 0)
             {
                 animator.SetBool("isMoving", true);
 
-                if (direction.x != 0)
+                if (playerMovementDirection.x != 0)
                 {
-                    spriteRenderer.flipX = direction.x < 0f;
+                    spriteRenderer.flipX = playerMovementDirection.x < 0f;
                 }
             }
         }
@@ -82,10 +86,10 @@ public class Movement : GameplayMonoBehaviour
     {
         if(!Paused)
         {
-            if (newDirection != direction)
+            if (newDirection != playerMovementDirection)
             {
-                direction = newDirection;
-                OnMovementChanged?.Invoke(direction);
+                playerMovementDirection = newDirection;
+                OnMovementChanged?.Invoke(playerMovementDirection);
             }
 
             AnimateMovement();

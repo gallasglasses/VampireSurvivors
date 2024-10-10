@@ -18,6 +18,8 @@ public class GemSpawner : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         isReturningActiveObjectsToPool = false;
         _pool = null;
         CreatePool();
@@ -52,7 +54,7 @@ public class GemSpawner : MonoBehaviour
 
     private void CreatePool()
     {
-        enemyManager = GetComponent<EnemyManager>();
+        enemyManager = FindObjectOfType<EnemyManager>();
         _pool = new ObjectPool<ExperienceGem>(CreateGem, OnTakeGemFromPool, OnReturnGemToPool, OnDestroyGem, true, 50, 50);
     }
 

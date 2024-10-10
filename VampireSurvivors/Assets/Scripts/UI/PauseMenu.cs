@@ -16,6 +16,8 @@ public class PauseMenu : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         if (playerController == null)
         {
             playerController = GameObject.Find("Player")?.GetComponent<PlayerController>();
@@ -28,8 +30,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ContinueGame()
     {
-        ToggleUI();
-        playerController.HandlePause();
+        playerController.HandleUIUnause();
     }
 
     public void QuitGame()

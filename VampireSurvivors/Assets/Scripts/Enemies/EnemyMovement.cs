@@ -29,10 +29,10 @@ public class EnemyMovement : GameplayMonoBehaviour
         get { return rangeMovementSettings; }
     }
 
-    [SerializeField] private EnemyDataContainer _enemyDataContainer;
-    public EnemyDataContainer EnemyDataContainer
+    [SerializeField] private EnemyMovementData _enemyMovementData;
+    public EnemyMovementData EnemyMovementData
     {
-        set => _enemyDataContainer = value;
+        set => _enemyMovementData = value;
     }
 
     private IMovementBehavior movementBehavior;
@@ -167,19 +167,19 @@ public class EnemyMovement : GameplayMonoBehaviour
         {
             case EMovementType.SPIRAL:
                 var spiralMovement = new SpiralMovement();
-                spiralMovement.Initialize(_enemyDataContainer.enemyMovementData.movementSettings);
+                spiralMovement.Initialize(_enemyMovementData.movementSettings);
                 return spiralMovement;
             case EMovementType.WAVE:
                 var waveMovement = new WaveMovement();
-                waveMovement.Initialize(_enemyDataContainer.enemyMovementData.movementSettings);
+                waveMovement.Initialize(_enemyMovementData.movementSettings);
                 return waveMovement;
             case EMovementType.CIRCLE:
                 var circleMovement = new CircleMovement();
-                circleMovement.Initialize(_enemyDataContainer.enemyMovementData.movementSettings);
+                circleMovement.Initialize(_enemyMovementData.movementSettings);
                 return circleMovement;
             case EMovementType.STRAIGHT:
                 var straightMovement = new StraightMovement();
-                straightMovement.Initialize(_enemyDataContainer.enemyMovementData.movementSettings);
+                straightMovement.Initialize(_enemyMovementData.movementSettings);
                 return straightMovement;
             default:
                 return null;
@@ -192,19 +192,19 @@ public class EnemyMovement : GameplayMonoBehaviour
         {
             case EMovementType.SPIRAL:
                 var spiralMovement = new SpiralChasing();
-                spiralMovement.Initialize(_enemyDataContainer.enemyMovementData.chasingSettings);
+                spiralMovement.Initialize(_enemyMovementData.chasingSettings);
                 return spiralMovement;
             case EMovementType.WAVE:
                 var waveMovement = new WaveChasing();
-                waveMovement.Initialize(_enemyDataContainer.enemyMovementData.chasingSettings);
+                waveMovement.Initialize(_enemyMovementData.chasingSettings);
                 return waveMovement;
             case EMovementType.CIRCLE:
                 var circleMovement = new CircleChasing();
-                circleMovement.Initialize(_enemyDataContainer.enemyMovementData.chasingSettings);
+                circleMovement.Initialize(_enemyMovementData.chasingSettings);
                 return circleMovement;
             case EMovementType.STRAIGHT:
                 var straightMovement = new StraightChasing();
-                straightMovement.Initialize(_enemyDataContainer.enemyMovementData.chasingSettings);
+                straightMovement.Initialize(_enemyMovementData.chasingSettings);
                 return straightMovement;
             default:
                 return null;
@@ -217,11 +217,11 @@ public class EnemyMovement : GameplayMonoBehaviour
         {
             case EActionType.SURROUND:
                 var circleAction = new CircleAction();
-                circleAction.Initialize(_enemyDataContainer.enemyMovementData.actionSettings);
+                circleAction.Initialize(_enemyMovementData.actionSettings);
                 return circleAction;
             case EActionType.DASH:
                 var dashAction = new DashAction();
-                dashAction.Initialize(_enemyDataContainer.enemyMovementData.actionSettings);
+                dashAction.Initialize(_enemyMovementData.actionSettings);
                 return dashAction;
             default:
                 return null;

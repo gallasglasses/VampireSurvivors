@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,8 +22,21 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        //DontDestroyOnLoad(gameObject);
         playerInput = new PlayerInput();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if(scene.buildIndex == 0)
+            return;
+
+        if(move != null && !move.enabled)
+            move.Enable();
+        if (fire != null && !fire.enabled)
+            fire.Enable();
+        if (pause != null && !pause.enabled)
+            pause.Enable();
     }
 
     private void OnEnable()
@@ -41,18 +56,20 @@ public class PlayerController : MonoBehaviour
         pause.performed += Pause;
 
     }
+
     private void OnDisable()
     {
-        move.Disable();
-
         fire.performed -= Fire;
         fire.canceled -= Fire;
         fire.Disable();
+        move.Disable();
 
         pause.performed -= Pause;
         pause.Disable();
 
         playerInput.Disable();
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void Start()
@@ -104,9 +121,27 @@ public class PlayerController : MonoBehaviour
         isSpaceFirstPressed = !isSpaceFirstPressed;
     }
 
+    public void HandleUIUnause()
+    {
+        if (isSpaceFirstPressed)
+        {
+            GameManager.Instance.UnPause();
+        }
+        uiManager.TogglePauseMenu();
+        isSpaceFirstPressed = !isSpaceFirstPressed;
+    }
+
     public void HandleDeath() // rewrite! bad code
     {
         GameManager.Instance.GameOver();
         uiManager.ToggleDeadMenu();
+
+
+        if (fire.enabled)
+            fire.Disable();
+        if (move.enabled)
+            move.Disable();
+        if (pause.enabled)
+            pause.Disable();
     }
 }

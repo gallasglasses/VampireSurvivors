@@ -55,6 +55,7 @@ MonoBehaviour:
   _typeXPGem: 2
   _damage: 2
   _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _enemyDataContainer: {fileID: 11400000, guid: feda14daa360cd74ca30d6b96e274570, type: 2}
 --- !u!212 &6586720894195769790
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -153,7 +154,7 @@ MonoBehaviour:
     _detectionRange: 8
     _exclusionRange: 20
     _minTimeBeforeExclusion: 3
-  _enemyDataContainer: {fileID: 11400000, guid: feda14daa360cd74ca30d6b96e274570, type: 2}
+  _enemyMovementData: {fileID: 11400000, guid: 503cf6f40686108478b734a53896c7bd, type: 2}
 --- !u!114 &6239088096143315369
 MonoBehaviour:
   m_ObjectHideFlags: 0

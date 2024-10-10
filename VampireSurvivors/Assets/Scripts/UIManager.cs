@@ -60,6 +60,8 @@ public class UIManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         if (rewardUI == null)
         {
             rewardUI = GameObject.Find("Reward")?.GetComponent<Reward_UI>();

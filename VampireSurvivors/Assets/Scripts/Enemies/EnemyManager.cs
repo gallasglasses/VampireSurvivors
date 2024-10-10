@@ -67,6 +67,8 @@ public class EnemyManager : GameplayMonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         if (enemySpawner == null)
         {
             enemySpawner = GetComponent<EnemySpawner>();
@@ -79,7 +81,7 @@ public class EnemyManager : GameplayMonoBehaviour
         enemiesSpawnedThisWave = 0;
         currentInterval = 0;
         spawnedWaves = -1;
-        Debug.Log($"spawnedWaves: {spawnedWaves}");
+        //Debug.Log($"spawnedWaves: {spawnedWaves}");
         isSpawningResiduals = false;
         nextWaveTime = Time.time;
         nextIntervalTime = Time.time;
@@ -142,7 +144,7 @@ public class EnemyManager : GameplayMonoBehaviour
             spawnedWaves++;
             StartNewWave();
 
-            Debug.Log($"Spawned wave {spawnedWaves} ");
+            //Debug.Log($"Spawned wave {spawnedWaves} ");
 
             nextWaveTime = Time.time + waveDuration;
         }
@@ -160,7 +162,7 @@ public class EnemyManager : GameplayMonoBehaviour
 
     void StartNewWave()
     {
-        Debug.Log("StartNewWave");
+        //Debug.Log("StartNewWave");
         enemiesSpawnedThisWave = 0;
         currentInterval = 0;
         isSpawningResiduals = false;
@@ -186,7 +188,7 @@ public class EnemyManager : GameplayMonoBehaviour
     float CalculateEnemiesForTime(float timeInSeconds)
     {
         float adjustedTime = timeInSeconds % (float)(waveDuration * maxWaves);
-        return Mathf.CeilToInt(startEnemiesAmount + (adjustedTime / (float)(waveDuration * maxWaves)) * (totalEnemiesPerWave - startEnemiesAmount));
+        return Mathf.CeilToInt(startEnemiesAmount + (adjustedTime / (float)(waveDuration * maxWaves)) * (/*totalEnemiesPerWave - */startEnemiesAmount));
     }
 
     void SpawnEnemy()
@@ -203,9 +205,9 @@ public class EnemyManager : GameplayMonoBehaviour
         Enemy enemyToSpawn = null;
         if (enemySpawner.pools.TryGetValue(selectedEnemyType, out var pool))
         {
-            Debug.Log($"selectedEnemyType : {selectedEnemyType} | pool : {pool}");
+            //Debug.Log($"selectedEnemyType : {selectedEnemyType} | pool : {pool}");
             enemyToSpawn = pool.Get();
-            Debug.Log($"enemyToSpawn : {enemyToSpawn}");
+            //Debug.Log($"enemyToSpawn : {enemyToSpawn}");
         }
 
         enemyToSpawn.transform.position = GetRandomSpawnPosition();

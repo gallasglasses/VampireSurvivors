@@ -53,8 +53,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: NefariousScamp
   _typeXPGem: 0
-  _damage: 5
+  _damage: 0.5
   _bloodEffect: {fileID: 626169662637136228, guid: 69076483c94412e4bae8db1042a44b16, type: 3}
+  _enemyDataContainer: {fileID: 11400000, guid: 733a75a9db7935a4a81c42415d172003, type: 2}
 --- !u!212 &8048202614285249700
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -153,7 +154,7 @@ MonoBehaviour:
     _detectionRange: 6
     _exclusionRange: 20
     _minTimeBeforeExclusion: 3
-  _enemyDataContainer: {fileID: 11400000, guid: 733a75a9db7935a4a81c42415d172003, type: 2}
+  _enemyMovementData: {fileID: 11400000, guid: 6b3dacfb94697ad47b0237fb0ce10abf, type: 2}
 --- !u!114 &956423847364055045
 MonoBehaviour:
   m_ObjectHideFlags: 0

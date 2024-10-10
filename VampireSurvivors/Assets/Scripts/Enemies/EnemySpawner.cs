@@ -23,6 +23,8 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.buildIndex == 0)
+            return;
         isReturningActiveObjectsToPool = false;
         pools = new();
         CreatePool();
@@ -30,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void ReturnActiveObjectsToPool()
     {
-        Debug.Log($"Return Active Enemies {activeEnemies.Count}");
+        //Debug.Log($"Return Active Enemies {activeEnemies.Count}");
         if (activeEnemies != null && activeEnemies.Count > 0)
         {
             isReturningActiveObjectsToPool = true;
@@ -38,7 +40,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 if (activeEnemies[i] != null && activeEnemies[i].gameObject.activeSelf)
                 {
-                    Debug.Log($"activeEnemies {activeEnemies[i]}");
+                    //Debug.Log($"activeEnemies {activeEnemies[i]}");
                     string enemyType = activeEnemies[i].GetTypeEnemy();
                     var pooledEnemy = pools[enemyType];
                     pooledEnemy.Release(activeEnemies[i]);
@@ -49,15 +51,15 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
             activeEnemies.Clear();
-            Debug.Log($"activeEnemies.Clear {activeEnemies.Count}");
+            //Debug.Log($"activeEnemies.Clear {activeEnemies.Count}");
         }
 
-        PrintEnemiesDict(pools);
+        //PrintEnemiesDict(pools);
     }
 
     private void Start()
     {
-        PrintEnemiesDict(pools);
+        //PrintEnemiesDict(pools);
     }
 
     private void CreatePool()
@@ -82,7 +84,7 @@ public class EnemySpawner : MonoBehaviour
             string enemyType = p.Key;
             var enemy = p.Value;
 
-            Debug.Log($"EnemyType: {enemyType}, Enemy: {enemy}");
+            //Debug.Log($"EnemyType: {enemyType}, Enemy: {enemy}");
         }
     }
 
@@ -93,17 +95,17 @@ public class EnemySpawner : MonoBehaviour
         {
             string enemyType = _prefab.GetTypeEnemy();
             var pooledEnemy = pools[enemyType];
-            Debug.Log($"Spawning enemy of type: {enemyType}");
+            //Debug.Log($"Spawning enemy of type: {enemyType}");
             enemy.SetPool(pooledEnemy);
         }
-        Debug.Log($"Spawning enemy of type: {_prefab.GetTypeEnemy()}");
+        //Debug.Log($"Spawning enemy of type: {_prefab.GetTypeEnemy()}");
 
         return enemy;
     }
 
     private void OnTakeEnemyFromPool(Enemy enemy)
     {
-        Debug.Log($"OnTakeEnemyFromPool: {enemy}");
+        //Debug.Log($"OnTakeEnemyFromPool: {enemy}");
         enemy.transform.position = enemyManager.GetRandomSpawnPosition();
         enemy.gameObject.SetActive(true);
         activeEnemies.Add(enemy);
@@ -111,7 +113,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnReturnEnemyToPool(Enemy enemy)
     {
-        Debug.Log($"OnReturnEnemyToPool: {enemy}");
+        //Debug.Log($"OnReturnEnemyToPool: {enemy}");
         enemy.gameObject.SetActive(false); 
         if (activeEnemies.Contains(enemy))
         {
@@ -125,7 +127,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnDestroyEnemy(Enemy enemy)
     {
-        Debug.Log($"OnDestroyEnemy | enemy: {enemy}");
+        //Debug.Log($"OnDestroyEnemy | enemy: {enemy}");
         Destroy(enemy.gameObject);
     }
 

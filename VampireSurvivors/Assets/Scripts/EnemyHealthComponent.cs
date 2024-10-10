@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemyHealthComponent : HealthComponent
 {
-    private float maxHealthMultiplier = 1f;
+    [Range(1.1f, 2f)]
+    [SerializeField] private float maxHealthMultiplier = 1.1f;
     private float defaultMaxHealth;
     public void Initialize(
         float maxHealth,
@@ -14,22 +15,25 @@ public class EnemyHealthComponent : HealthComponent
         this.maxHealthMultiplier = maxHealthMultiplier;
     }
 
-    protected override void Awake()
+    protected override void OnEnable()
     {
         defaultMaxHealth = maxHealth; 
         PowerUpHealth();
-        base.Awake();
+        base.OnEnable();
     }
 
     private void PowerUpHealth()
     {
-        if(GameManager.Instance.player.GetCurrentLevel() > 1)
+        if(GameManager.Instance.player.GetCurrentLevel() >= 1)
         {
-            maxHealthMultiplier = GameManager.Instance.player.GetCurrentLevel();
+            maxHealth = defaultMaxHealth * Mathf.Pow(maxHealthMultiplier, GameManager.Instance.player.GetCurrentLevel());
         }
-        maxHealth = defaultMaxHealth * maxHealthMultiplier;
+        else
+        {
+            maxHealth = defaultMaxHealth;
+        }
 
         //Debug.Log("PowerUpHealth");
-        InvokeHealthAction();
+        //InvokeHealthAction();
     }
 }
