@@ -103,7 +103,7 @@ public class RewardManager : MonoBehaviour
                 offeredRewards.Add(randomReward);
             }
         }
-        uiManager.DisplayRewards(offeredRewards);
+        //uiManager.DisplayRewards(offeredRewards);
     }
 
     void IncreaseHealth()

@@ -10,7 +10,7 @@ public class Reward_UI : MonoBehaviour
     public GameObject slotPrefab;
     public VerticalLayoutGroup vertLayoutGroup;
     public int numberOfSlots = 4;
-    public RewardManager rewardManager;
+    public NewRewardManager rewardManager;
 
     public List<RewardSlot_UI> slots = new List<RewardSlot_UI>();
 
@@ -32,15 +32,15 @@ public class Reward_UI : MonoBehaviour
             return;
         if (rewardManager == null)
         {
-            rewardManager = GameObject.Find("RewardManager")?.GetComponent<RewardManager>();
+            rewardManager = GameObject.Find("NewRewardManager")?.GetComponent<NewRewardManager>();
             if (rewardManager == null)
             {
-                Debug.LogError("rewardManager not found!");
+                Debug.LogError("NewRewardManager not found!");
             }
         }
     }
 
-    public void RefreshRewardPanel (List<Reward> rewards)
+    public void RefreshRewardPanel (List<RewardObject> rewards)
     {
         for (int i = 0; i < numberOfSlots; i++)
         {
@@ -65,10 +65,10 @@ public class Reward_UI : MonoBehaviour
         rewardPanel.SetActive(!rewardPanel.activeSelf);
     }
 
-    public void AcceptReward(TypeReward type)
+    public void AcceptReward(RewardObject type)
     {
         ToggleInventory();
-        rewardManager.ActivateReward(type);
+        rewardManager.ApplyReward(type);
     }
 
     void OnDisable()

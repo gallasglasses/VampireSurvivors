@@ -6,6 +6,7 @@ using UnityEngine;
 public class WeaponReward : RewardObject
 {
     //for all WeaponType
+    public bool isDefault;
     public Sprite weaponSprite;
     public float cooldown;
     public float damage;
@@ -23,6 +24,7 @@ public class WeaponReward : RewardObject
     //if WeaponType.PROJECTILE
 
     public ProjectileType projectileType;
+    public Projectile projectilePrefab;
     public ProjectileDirectionType projectileDirectionType;
 
     public ProjectileAngleStepType projectileAngleStepType; // for additionalProjectiles
@@ -33,38 +35,5 @@ public class WeaponReward : RewardObject
     public float projectileForce;
     public int projectileCount;
     public float projectileDeactivationTime;
-}
 
-public enum WeaponType
-{
-    PROJECTILE,
-    AURA
-}
-
-public enum AuraType
-{
-    Garlic,
-    Aura
-}
-
-public enum ProjectileType
-{
-    Dagger,
-    Knife
-}
-
-public enum ProjectileDirectionType 
-{ 
-    MOUSE, 
-    RANDOM, 
-    PlayerMovement, 
-    DOWN, 
-    NearestEnemy 
-}
-
-public enum ProjectileAngleStepType 
-{ 
-    NONE, 
-    VALUE, 
-    EQUAL 
 }

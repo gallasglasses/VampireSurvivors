@@ -90,7 +90,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void DisplayRewards(List<Reward> rewards)
+    public void DisplayRewards(List<RewardObject> rewards)
     {
         EnableUI();
         rewardUI.RefreshRewardPanel(rewards);

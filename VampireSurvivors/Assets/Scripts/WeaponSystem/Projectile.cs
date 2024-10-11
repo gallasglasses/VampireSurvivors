@@ -5,10 +5,11 @@ using UnityEngine.Pool;
 
 public class Projectile : KillingActor
 {
-    [SerializeField] private float force = 10f;
-    [SerializeField] private float damage = 1f;
+    [SerializeField] private float force = 10f; // +
+    [SerializeField] private float damage = 1f; // +
+    [SerializeField] private float deactivateTime = 5f; // +
+    private ProjectileType projectileType; // +
     private float powerUpDamage = 1;
-    [SerializeField] private float deactivateTime = 5f;
 
     private Rigidbody2D body;
     private Vector3 direction;
@@ -18,6 +19,21 @@ public class Projectile : KillingActor
 
     private bool _hasBeenReleased = false;
     private bool _hasBeenPaused = false;
+
+    private WeaponReward _weaponReward;
+    public WeaponReward WeaponReward
+    {
+        get => _weaponReward;
+        set => _weaponReward = value;
+    }
+
+    public void Initialize(WeaponReward weaponReward)
+    {
+        this.force = weaponReward.projectileForce;
+        this.damage = weaponReward.damage;
+        this.deactivateTime = weaponReward.projectileDeactivationTime;
+        this.projectileType = weaponReward.projectileType;
+    }
 
     protected override void Awake()
     {

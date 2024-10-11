@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54371c65882f10246b55ea44537a779e, type: 3}
+  m_Name: Dagger
+  m_EditorClassIdentifier: 
+  rewardName: Dagger
+  description: Daggggggeeeer
+  icon: {fileID: 322498976, guid: 3ca4e2ca058d38040bb1eb0f6803c19c, type: 3}
+  isAddedToManager: 0
+  isDefault: 1
+  weaponSprite: {fileID: 322498976, guid: 3ca4e2ca058d38040bb1eb0f6803c19c, type: 3}
+  cooldown: 1
+  damage: 1
+  weaponType: 0
+  auraType: 0
+  radiusOfEffect: 0
+  projectileType: 0
+  projectilePrefab: {fileID: 0}
+  projectileDirectionType: 3
+  projectileAngleStepType: 0
+  projectileAngleStepValue: 0
+  timeBetweenShots: 0
+  projectileForce: 10
+  projectileCount: 1
+  projectileDeactivationTime: 2.5

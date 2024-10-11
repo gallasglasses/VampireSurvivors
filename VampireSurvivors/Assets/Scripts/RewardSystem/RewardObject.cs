@@ -8,5 +8,6 @@ public class RewardObject : ScriptableObject
 {
     public string rewardName;
     public string description;
-    public Sprite icon;
+    public Sprite icon; 
+    public bool isAddedToManager;
 }

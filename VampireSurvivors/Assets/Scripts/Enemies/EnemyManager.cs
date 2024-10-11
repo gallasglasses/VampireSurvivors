@@ -25,7 +25,6 @@ public class EnemyManager : GameplayMonoBehaviour
     [SerializeField] private List<string> enemyTypes = new List<string>();
     [SerializeField] private List<Enemy> enemyPrefabs = new List<Enemy>();
 
-    //[SerializeField] private MyDictionary<string, Enemy> enemies;
     public Dictionary<string, Enemy> enemiesDict = new();
 
     private EnemySpawner enemySpawner;

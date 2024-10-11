@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84d332e7c600a4946bdcf47a3ff1b62f, type: 3}
+  m_Name: Speed
+  m_EditorClassIdentifier: 
+  rewardName: Speed
+  description: Go go go
+  icon: {fileID: 21300000, guid: 3b46ae0d655361e48a7fa26028b43f2c, type: 3}
+  isAddedToManager: 1
+  statType: 2
+  statIncreaseAmount: 0

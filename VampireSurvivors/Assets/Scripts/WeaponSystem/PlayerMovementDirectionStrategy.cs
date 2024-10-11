@@ -6,7 +6,7 @@ public class PlayerMovementDirectionStrategy : IProjectileDirectionStrategy
 {
     private Vector2 playerMovementVector;
 
-    public PlayerMovementDirectionStrategy(PlayerController playerController)
+    public PlayerMovementDirectionStrategy()
     {
         var playerMovement = GameManager.Instance.player.GetComponent<Movement>();
         if (playerMovement != null)

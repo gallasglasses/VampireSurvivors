@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 public class NewRewardManager : MonoBehaviour
 {
@@ -10,10 +11,11 @@ public class NewRewardManager : MonoBehaviour
     [SerializeField] private WeaponComponent weaponComponent;
     [SerializeField] private UIManager uiManager;
 
-    private List<RewardObject> rewards = new List<RewardObject>();
+    [SerializeField] private RewardsInventory rewards;
 
     private HashSet<AuraType> obtainedAuraWeapons = new HashSet<AuraType>();
     private HashSet<ProjectileType> obtainedProjectileWeapons = new HashSet<ProjectileType>();
+    private ExperienceComponent xpComponent;
 
     void Awake()
     {
@@ -27,9 +29,49 @@ public class NewRewardManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void DisplayOfferedRewards()
+
+    void Start()
     {
-        List<RewardObject> filteredRewards = rewards.Where(reward =>
+
+        xpComponent = GameManager.Instance.player.GetComponent<ExperienceComponent>();
+        if (xpComponent != null)
+        {
+            xpComponent.OnLevelUp += DisplayOfferedRewards;
+        }
+    }
+
+    public void DeleteReward(RewardObject removableReward)
+    {
+        if (rewards.rewardsInventory.Contains(removableReward))
+        {
+            rewards.rewardsInventory.Remove(removableReward);
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(rewards);
+            UnityEditor.AssetDatabase.SaveAssets();
+#endif
+        }
+    }
+
+    public void AddRewards(List<RewardObject> newRewards)
+    {
+        foreach (var reward in newRewards)
+        {
+            if (!rewards.rewardsInventory.Contains(reward))
+            {
+                rewards.rewardsInventory.Add(reward);
+#if UNITY_EDITOR
+                UnityEditor.EditorUtility.SetDirty(rewards);
+                UnityEditor.AssetDatabase.SaveAssets();
+#endif
+            }
+        }
+
+
+    }
+
+    private void DisplayOfferedRewards()
+    {
+        List<RewardObject> filteredRewards = rewards.rewardsInventory.Where(reward =>
         {
             if (reward is WeaponUpgradeReward upgradeReward)
             {
@@ -50,12 +92,12 @@ public class NewRewardManager : MonoBehaviour
             .Take(4)
             .ToList();
 
-        // Отправляем выбранные награды в UI для отображения
         uiManager.DisplayRewards(offeredRewards);
     }
 
     public void ApplyReward(RewardObject reward)
     {
+        uiManager.DisableUI();
         if (reward is PlayerStatReward playerStatReward)
         {
             ApplyPlayerStatReward(playerStatReward);
@@ -96,7 +138,7 @@ public class NewRewardManager : MonoBehaviour
             if (!obtainedAuraWeapons.Contains(reward.auraType))
             {
                 obtainedAuraWeapons.Add(reward.auraType);
-                // Логика для добавления нового оружия в инвентарь игрока
+                // Logic for adding new weapons to the player's inventory
 
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -113,7 +155,7 @@ public class NewRewardManager : MonoBehaviour
             if (!obtainedProjectileWeapons.Contains(reward.projectileType))
             {
                 obtainedProjectileWeapons.Add(reward.projectileType);
-                // Логика для добавления нового оружия в инвентарь игрока
+                // Logic for adding new weapons to the player's inventory
 
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -131,7 +173,7 @@ public class NewRewardManager : MonoBehaviour
         {
             if (obtainedAuraWeapons.Contains(reward.auraType))
             {
-                // Логика для улучшения уже полученного оружия
+                // Logic for upgrading already acquired weapons
 
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 switch (reward.weaponUpgradeType)
@@ -157,7 +199,7 @@ public class NewRewardManager : MonoBehaviour
         {
             if (obtainedProjectileWeapons.Contains(reward.projectileType))
             {
-                // Логика для улучшения уже полученного оружия
+                // Logic for upgrading already acquired weapons
 
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 switch (reward.weaponUpgradeType)
