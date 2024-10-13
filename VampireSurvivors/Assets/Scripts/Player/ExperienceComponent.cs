@@ -38,12 +38,6 @@ public class ExperienceComponent : MonoBehaviour
         SetXP(currentXP);
     }
 
-    //private void Start()
-    //{
-    //    xpDictionary = experienceDictionary.ToDictionary();
-    //    SetXP(currentXP);
-    //}
-
     public void TryToAddXP(TypeXPGem newXPType)
     {
         if(xpDictionary.TryGetValue(newXPType, out int newXP))

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class KillingComponent : MonoBehaviour
 {
@@ -11,6 +13,19 @@ public class KillingComponent : MonoBehaviour
 
     public int EnemiesKilled
     {  get => _enemiesKilled; }
+
+    void Awake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _enemiesKilled = 0;
+        if (OnKilledNewEnemy != null)
+        {
+            OnKilledNewEnemy?.Invoke();
+        }
+    }
 
     public void FoundEnemy(GameObject enemy)
     {
@@ -30,5 +45,9 @@ public class KillingComponent : MonoBehaviour
         {
             OnKilledNewEnemy?.Invoke();
         }
+    }
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

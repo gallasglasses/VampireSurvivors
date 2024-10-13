@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
     {
         if (scene.buildIndex == 0)
             return;
+        _playerStats = new();
         transform.position = Vector3.zero;
         if (healthBarFill == null)
         {
@@ -72,6 +73,10 @@ public class Player : MonoBehaviour
             {
                 Debug.LogError("HealthFill not found!");
             }
+        }
+        else
+        {
+            UpdateHealthBar();
         }
 
         if (levelBarSlider == null)
@@ -82,6 +87,10 @@ public class Player : MonoBehaviour
                 Debug.LogError("levelBarSlider not found!");
             }
         }
+        else
+        {
+            UpdateXPBar();
+        }
 
         if (levelText == null)
         {
@@ -90,6 +99,10 @@ public class Player : MonoBehaviour
             {
                 Debug.LogError("levelText not found!");
             }
+        }
+        else
+        {
+            UpdateLevelText();
         }
     }
 
@@ -100,7 +113,9 @@ public class Player : MonoBehaviour
 
     void UpdateLevelText()
     {
+        Debug.Log("UpdateLevelText!");
         _playerStats.maxLevel = GetCurrentLevel();
+        Debug.Log(_playerStats.maxLevel);
         levelText.text = GetCurrentLevel().ToString();
     }
 
