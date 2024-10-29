@@ -9,6 +9,11 @@ public class Projectile : KillingActor
     [SerializeField] private float damage = 1f; // +
     [SerializeField] private float deactivateTime = 5f; // +
     private ProjectileType projectileType; // +
+    public ProjectileType ProjectileType
+    {
+        get=> ProjectileType;
+    }
+
     private float powerUpDamage = 1;
 
     private Rigidbody2D body;

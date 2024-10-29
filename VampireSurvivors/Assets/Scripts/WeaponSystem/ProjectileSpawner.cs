@@ -9,8 +9,9 @@ public class ProjectileSpawner : MonoBehaviour
 {
     public ObjectPool<Projectile> _pool;
     [SerializeField] private int _spawnCount = 100;
+    public Dictionary<ProjectileType, ObjectPool<Projectile>> pools = new();
     private List<Projectile> activeProjectiles = new List<Projectile>();
-    private WeaponComponent weaponComponent;
+    private ProjectileWeapon projectileWeapon;
     private bool isReturningActiveObjectsToPool = false;
 
     private void Awake()
@@ -36,7 +37,9 @@ public class ProjectileSpawner : MonoBehaviour
                 if (activeProjectiles[i] != null && activeProjectiles[i].gameObject.activeSelf)
                 {
                     Debug.Log($"activeProjectiles {activeProjectiles[i]}");
-                    _pool.Release(activeProjectiles[i]);
+                    ProjectileType projectileType = activeProjectiles[i].ProjectileType;
+                    var pooledProjectile = pools[projectileType];
+                    pooledProjectile.Release(activeProjectiles[i]);
                 }
                 else
                 {
@@ -54,16 +57,27 @@ public class ProjectileSpawner : MonoBehaviour
 
     private void CreatePool()
     {
-        weaponComponent = GetComponent<WeaponComponent>();
-        _pool = new ObjectPool<Projectile>(CreateProjectile, OnTakeProjectileFromPool, OnReturnProjectileToPool, OnDestroyProjectile, true, _spawnCount, _spawnCount);
+        projectileWeapon = GetComponent<ProjectileWeapon>();
+
+        foreach (var e in projectileWeapon.projectiles)
+        {
+            var prefab = e.Value;
+            if (prefab != null)
+            {
+                var _pool = new ObjectPool<Projectile>(() => CreateProjectile(prefab), OnTakeProjectileFromPool, OnReturnProjectileToPool, OnDestroyProjectile, true, _spawnCount, _spawnCount);
+                pools.Add(e.Key, _pool);
+            }
+        }
     }
 
-    private Projectile CreateProjectile()
+    private Projectile CreateProjectile(Projectile _prefab)
     {
-        var projectile = Instantiate(weaponComponent.projectile, weaponComponent.transform.position, weaponComponent.projectileRotation);
+        var projectile = Instantiate(_prefab, projectileWeapon.transform.position, Quaternion.identity);
         if (projectile != null)
         {
-            projectile.SetPool(_pool);
+            var projectileType = _prefab.ProjectileType;
+            var pooledProjectile = pools[projectileType];
+            projectile.SetPool(pooledProjectile);
         }
 
         return projectile;
